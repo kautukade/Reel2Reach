@@ -47,7 +47,7 @@ export default function WhatsAppButton() {
             <MessageCircle size={18} /> WhatsApp
           </a>
           <a
-            href="/book"
+            href="#/book"
             className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-[#FF5A5F] to-[#FF3D8D] text-white font-semibold text-sm"
           >
             Book Now →
