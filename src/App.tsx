@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { supabase, isSupabaseConfigured } from './lib/supabase';
 import Layout from './components/layout/Layout';
@@ -20,13 +20,13 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
       setAuthenticated(false);
       return;
     }
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data }) => {
+      setAuthenticated(!!data.session);
+    });
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
       setAuthenticated(!!session);
     });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setAuthenticated(!!session);
-    });
-    return () => subscription.unsubscribe();
+    return () => data.subscription.unsubscribe();
   }, []);
 
   if (authenticated === null) {
@@ -46,9 +46,8 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
-        {/* Public routes */}
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -64,7 +63,6 @@ function App() {
           <Route path="/terms" element={<Terms />} />
         </Route>
 
-        {/* Admin routes */}
         <Route path="/admin" element={<AdminLogin />} />
         <Route
           path="/admin/dashboard"
@@ -75,10 +73,9 @@ function App() {
           }
         />
 
-        {/* 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
