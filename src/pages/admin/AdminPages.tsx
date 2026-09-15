@@ -1,13 +1,51 @@
+import type { FormEvent, ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
-import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-  LayoutDashboard, Image, Briefcase, Package, Plus, MessageSquare, 
-  Users, Settings, FileText, LogOut, Menu, X, Loader2, AlertCircle
+import {
+  AlertCircle,
+  BarChart3,
+  BookOpen,
+  Briefcase,
+  Database,
+  ExternalLink,
+  FileText,
+  HardDrive,
+  Home,
+  Image as ImageIcon,
+  LayoutDashboard,
+  Loader2,
+  LogOut,
+  Menu,
+  MessageSquare,
+  Package,
+  Puzzle,
+  SearchCheck,
+  Settings,
+  Share2,
+  Tags,
+  Users,
+  X,
 } from 'lucide-react';
+import { isSupabaseConfigured, supabase } from '../../lib/supabase';
+import BlogManager from './BlogManager';
+import {
+  AddonsManager,
+  CaseStudiesManager,
+  CategoriesManager,
+  HomepageManager,
+  LeadsManager,
+  MediaLibraryManager,
+  MetricsManager,
+  PackagesManager,
+  PortfolioManager,
+  SeoManager,
+  ServicesManager,
+  SettingsManager,
+  SocialLinksManager,
+  TestimonialsManager,
+} from './AdminManagers';
 
-// Admin Login
 export function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,326 +53,173 @@ export function AdminLogin() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLogin = async (event: FormEvent) => {
+    event.preventDefault();
     setError('');
     setLoading(true);
-
     if (!isSupabaseConfigured()) {
-      setError('Supabase is not configured. Please set up environment variables.');
+      setError('Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY first.');
       setLoading(false);
       return;
     }
-
     try {
-      const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
+      const { error: authError } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
       if (authError) throw authError;
       navigate('/admin/dashboard');
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Login failed';
-      setError(message);
+    } catch (loginError) {
+      setError(loginError instanceof Error ? loginError.message : 'Login failed.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#07090F] px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
-      >
-        <div className="text-center mb-8">
-          <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-gradient-to-br from-[#FF5A5F] to-[#8B5CF6] flex items-center justify-center">
-            <span className="text-white font-bold">R2</span>
-          </div>
-          <h1 className="text-2xl font-bold">Admin Login</h1>
-          <p className="text-[#A9ACB8] text-sm mt-1">Reel2Reach Media</p>
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#07090F] px-4 text-white">
+      <div className="pointer-events-none absolute -left-24 top-20 h-80 w-80 rounded-full bg-[#FF3D8D]/12 blur-[120px]" />
+      <div className="pointer-events-none absolute -bottom-24 right-0 h-96 w-96 rounded-full bg-[#8B5CF6]/12 blur-[130px]" />
+      <div className="pointer-events-none absolute inset-0 cinematic-grid opacity-[0.1]" />
+      <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} className="relative w-full max-w-md">
+        <div className="mb-8 text-center">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FF5A5F] via-[#FF3D8D] to-[#8B5CF6] shadow-[0_20px_55px_rgba(255,61,141,.2)]"><span className="font-bold">R2</span></div>
+          <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold">Reel2Reach CMS</h1>
+          <p className="mt-2 text-sm text-[#A9ACB8]">Manage blogs, media, leads and website content.</p>
         </div>
-
-        <form onSubmit={handleLogin} className="space-y-4 p-8 rounded-2xl bg-[#0B0E16] border border-white/5">
-          {error && (
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
-              <AlertCircle size={16} /> {error}
-            </div>
-          )}
-          <div>
-            <label className="block text-sm font-medium mb-1.5">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-4 py-3 rounded-xl bg-[#10131D] border border-white/10 text-white focus:border-[#FF3D8D]/50 focus:outline-none"
-              placeholder="admin@reel2reach.com"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1.5">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-4 py-3 rounded-xl bg-[#10131D] border border-white/10 text-white focus:border-[#FF3D8D]/50 focus:outline-none"
-              placeholder="••••••••"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 rounded-full bg-gradient-to-r from-[#FF5A5F] to-[#FF3D8D] text-white font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
-          >
-            {loading ? <Loader2 size={18} className="animate-spin" /> : 'Sign In'}
-          </button>
+        <form onSubmit={handleLogin} className="space-y-4 rounded-[26px] border border-white/[0.07] bg-[#0B0E16]/90 p-7 shadow-2xl backdrop-blur-xl">
+          {error && <div className="flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-300"><AlertCircle size={16} className="mt-0.5 shrink-0" />{error}</div>}
+          <div><label className="mb-2 block text-xs font-semibold text-white/65">Email</label><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" className="creative-input" /></div>
+          <div><label className="mb-2 block text-xs font-semibold text-white/65">Password</label><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" className="creative-input" /></div>
+          <button type="submit" disabled={loading} className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#FF5A5F] to-[#FF3D8D] py-3 text-sm font-semibold disabled:opacity-50">{loading ? <Loader2 size={17} className="animate-spin" /> : 'Sign In'}</button>
         </form>
-
-        <p className="text-center text-[#A9ACB8] text-xs mt-6">
-          <Link to="/" className="hover:text-white">← Back to website</Link>
-        </p>
+        <p className="mt-6 text-center text-xs text-white/35"><Link to="/" className="hover:text-white">← Back to website</Link></p>
       </motion.div>
     </div>
   );
 }
 
-// Admin Layout
-function AdminLayout({ children, activeTab, onTabChange }: { children: React.ReactNode; activeTab: string; onTabChange: (tab: string) => void }) {
+type TabId = 'dashboard' | 'blog' | 'leads' | 'media' | 'portfolio' | 'categories' | 'services' | 'packages' | 'addons' | 'testimonials' | 'case-studies' | 'homepage' | 'metrics' | 'social' | 'seo' | 'settings';
+
+const tabs: Array<{ id: TabId; label: string; icon: typeof LayoutDashboard; group: string }> = [
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, group: 'Overview' },
+  { id: 'blog', label: 'Blog / Journal', icon: BookOpen, group: 'Content' },
+  { id: 'media', label: 'Media Library', icon: HardDrive, group: 'Content' },
+  { id: 'portfolio', label: 'Portfolio', icon: ImageIcon, group: 'Content' },
+  { id: 'categories', label: 'Portfolio Categories', icon: Tags, group: 'Content' },
+  { id: 'services', label: 'Services', icon: Briefcase, group: 'Content' },
+  { id: 'packages', label: 'Packages', icon: Package, group: 'Content' },
+  { id: 'addons', label: 'Add-ons', icon: Puzzle, group: 'Content' },
+  { id: 'testimonials', label: 'Testimonials', icon: Users, group: 'Content' },
+  { id: 'case-studies', label: 'Case Studies', icon: FileText, group: 'Content' },
+  { id: 'homepage', label: 'Homepage CMS', icon: Home, group: 'Website' },
+  { id: 'metrics', label: 'Metrics', icon: BarChart3, group: 'Website' },
+  { id: 'social', label: 'Social Links', icon: Share2, group: 'Website' },
+  { id: 'seo', label: 'SEO', icon: SearchCheck, group: 'Website' },
+  { id: 'settings', label: 'Site Settings', icon: Settings, group: 'Website' },
+  { id: 'leads', label: 'Leads', icon: MessageSquare, group: 'Business' },
+];
+
+function AdminLayout({ children, activeTab, onTabChange }: { children: ReactNode; activeTab: TabId; onTabChange: (tab: TabId) => void }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [email, setEmail] = useState('');
   const navigate = useNavigate();
+  const groups = Array.from(new Set(tabs.map((tab) => tab.group)));
+  const active = tabs.find((tab) => tab.id === activeTab);
 
-  const tabs = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'leads', label: 'Leads', icon: MessageSquare },
-    { id: 'portfolio', label: 'Portfolio', icon: Image },
-    { id: 'packages', label: 'Packages', icon: Package },
-    { id: 'services', label: 'Services', icon: Briefcase },
-    { id: 'testimonials', label: 'Testimonials', icon: Users },
-    { id: 'case-studies', label: 'Case Studies', icon: FileText },
-    { id: 'settings', label: 'Settings', icon: Settings },
-  ];
-
-  const handleLogout = async () => {
-    if (isSupabaseConfigured()) {
-      await supabase.auth.signOut();
-    }
-    navigate('/admin');
-  };
+  useEffect(() => { supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email || '')); }, []);
+  const logout = async () => { if (isSupabaseConfigured()) await supabase.auth.signOut(); navigate('/admin'); };
 
   return (
-    <div className="min-h-screen bg-[#07090F] flex">
-      {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#0B0E16] border-r border-white/5 transform transition-transform lg:translate-x-0 lg:static ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="p-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#FF5A5F] to-[#8B5CF6] flex items-center justify-center">
-                <span className="text-white font-bold text-xs">R2</span>
-              </div>
-              <span className="font-bold text-sm">Admin</span>
-            </div>
-            <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-[#A9ACB8]">
-              <X size={20} />
-            </button>
-          </div>
+    <div className="flex min-h-screen bg-[#07090F] text-white">
+      <aside className={`fixed inset-y-0 left-0 z-[70] flex w-[286px] flex-col border-r border-white/[0.06] bg-[#090C13] transition-transform lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-5">
+          <div className="flex items-center gap-3"><div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#FF5A5F] to-[#8B5CF6] text-xs font-bold">R2</div><div><p className="font-bold leading-none">Reel2Reach</p><p className="mt-1 text-[9px] uppercase tracking-[.2em] text-white/25">Content OS</p></div></div>
+          <button onClick={() => setSidebarOpen(false)} className="text-white/45 lg:hidden"><X size={19} /></button>
         </div>
-        <nav className="px-3 space-y-1">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => { onTabChange(tab.id); setSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                activeTab === tab.id
-                  ? 'bg-[#FF3D8D]/10 text-[#FF3D8D]'
-                  : 'text-[#A9ACB8] hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <tab.icon size={18} />
-              {tab.label}
-            </button>
-          ))}
-        </nav>
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/5">
-          <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-[#A9ACB8] hover:text-white hover:bg-white/5 transition-colors">
-            <LogOut size={18} /> Logout
-          </button>
-          <Link to="/" className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-[#A9ACB8] hover:text-white hover:bg-white/5 transition-colors mt-1">
-            ← View Website
-          </Link>
+        <div className="flex-1 overflow-y-auto px-3 py-4">
+          {groups.map((group) => <div key={group} className="mb-5"><p className="mb-2 px-3 text-[9px] font-bold uppercase tracking-[.2em] text-white/20">{group}</p><div className="space-y-1">{tabs.filter((tab) => tab.group === group).map((tab) => { const selected = tab.id === activeTab; return <button key={tab.id} onClick={() => { onTabChange(tab.id); setSidebarOpen(false); }} className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition ${selected ? 'bg-[#FF3D8D]/10 text-[#FF7AB5]' : 'text-white/48 hover:bg-white/[0.035] hover:text-white'}`}><tab.icon size={17} /><span className="flex-1">{tab.label}</span>{selected && <span className="h-1.5 w-1.5 rounded-full bg-[#FF3D8D]" />}</button>; })}</div></div>)}
+        </div>
+        <div className="border-t border-white/[0.06] p-3">
+          {email && <p className="mb-2 truncate px-3 text-[10px] text-white/25">{email}</p>}
+          <Link to="/" target="_blank" className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white/45 hover:text-white"><ExternalLink size={16} />View website</Link>
+          <button onClick={logout} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white/45 hover:text-red-300"><LogOut size={16} />Logout</button>
         </div>
       </aside>
-
-      {/* Main */}
-      <div className="flex-1 min-w-0">
-        <header className="sticky top-0 z-40 bg-[#07090F]/80 backdrop-blur-xl border-b border-white/5 px-4 lg:px-8 py-4 flex items-center gap-4">
-          <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-[#A9ACB8]">
-            <Menu size={24} />
-          </button>
-          <h1 className="text-lg font-semibold capitalize">{activeTab}</h1>
+      {sidebarOpen && <button aria-label="Close sidebar" onClick={() => setSidebarOpen(false)} className="fixed inset-0 z-[60] bg-black/65 backdrop-blur-sm lg:hidden" />}
+      <div className="min-w-0 flex-1">
+        <header className="sticky top-0 z-50 flex h-16 items-center gap-4 border-b border-white/[0.06] bg-[#07090F]/88 px-4 backdrop-blur-2xl sm:px-6 lg:h-20 lg:px-8">
+          <button onClick={() => setSidebarOpen(true)} className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-white/60 lg:hidden"><Menu size={19} /></button>
+          <div><p className="text-[9px] font-bold uppercase tracking-[.18em] text-white/25">Admin / {active?.group}</p><h1 className="mt-0.5 font-semibold">{active?.label}</h1></div>
+          <span className="ml-auto hidden items-center gap-2 rounded-full border border-emerald-400/15 bg-emerald-400/[0.04] px-3 py-1.5 text-[10px] font-semibold text-emerald-300 sm:inline-flex"><Database size={12} />Supabase CMS</span>
         </header>
-        <main className="p-4 lg:p-8">
-          {children}
-        </main>
+        <main className="mx-auto max-w-[1500px] p-4 sm:p-6 lg:p-8">{children}</main>
       </div>
-
-      {/* Overlay */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={() => setSidebarOpen(false)} />
-      )}
     </div>
   );
 }
 
-// Dashboard content
-function DashboardContent() {
-  const [stats, setStats] = useState({ leads: 0, portfolio: 0, packages: 0 });
+type DashboardStats = { leads: number; blogs: number; publishedBlogs: number; portfolio: number; services: number; packages: number };
+
+function DashboardContent({ onNavigate }: { onNavigate: (tab: TabId) => void }) {
+  const [stats, setStats] = useState<DashboardStats>({ leads: 0, blogs: 0, publishedBlogs: 0, portfolio: 0, services: 0, packages: 0 });
   const [loading, setLoading] = useState(true);
+  const [recentBlogs, setRecentBlogs] = useState<Array<{ id: string; title: string; status: string; created_at: string }>>([]);
 
   useEffect(() => {
-    async function fetchStats() {
-      if (!isSupabaseConfigured()) { setLoading(false); return; }
-      try {
-        const [{ count: leadsCount }, { count: portfolioCount }, { count: packagesCount }] = await Promise.all([
-          supabase.from('leads').select('*', { count: 'exact', head: true }),
-          supabase.from('portfolio_items').select('*', { count: 'exact', head: true }),
-          supabase.from('packages').select('*', { count: 'exact', head: true }),
-        ]);
-        setStats({ leads: leadsCount || 0, portfolio: portfolioCount || 0, packages: packagesCount || 0 });
-      } catch { /* ignore */ }
+    let active = true;
+    async function load() {
+      if (!isSupabaseConfigured()) { if (active) setLoading(false); return; }
+      const [leads, blogs, publishedBlogs, portfolio, services, packages, blogRows] = await Promise.all([
+        supabase.from('leads').select('*', { count: 'exact', head: true }),
+        supabase.from('blog_posts').select('*', { count: 'exact', head: true }),
+        supabase.from('blog_posts').select('*', { count: 'exact', head: true }).eq('status', 'published'),
+        supabase.from('portfolio_items').select('*', { count: 'exact', head: true }),
+        supabase.from('services').select('*', { count: 'exact', head: true }),
+        supabase.from('packages').select('*', { count: 'exact', head: true }),
+        supabase.from('blog_posts').select('id,title,status,created_at').order('created_at', { ascending: false }).limit(5),
+      ]);
+      if (!active) return;
+      setStats({ leads: leads.count || 0, blogs: blogs.count || 0, publishedBlogs: publishedBlogs.count || 0, portfolio: portfolio.count || 0, services: services.count || 0, packages: packages.count || 0 });
+      setRecentBlogs((blogRows.data || []) as Array<{ id: string; title: string; status: string; created_at: string }>);
       setLoading(false);
     }
-    fetchStats();
+    load();
+    return () => { active = false; };
   }, []);
 
-  return (
-    <div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        {[
-          { label: 'Total Leads', value: stats.leads, color: 'from-[#FF5A5F] to-[#FF3D8D]' },
-          { label: 'Portfolio Items', value: stats.portfolio, color: 'from-[#FF3D8D] to-[#8B5CF6]' },
-          { label: 'Packages', value: stats.packages, color: 'from-[#8B5CF6] to-[#FF5A5F]' },
-        ].map((stat) => (
-          <div key={stat.label} className="p-6 rounded-xl bg-[#0B0E16] border border-white/5">
-            <p className="text-[#A9ACB8] text-sm mb-1">{stat.label}</p>
-            <p className="text-3xl font-bold">
-              {loading ? '—' : stat.value}
-            </p>
-          </div>
-        ))}
-      </div>
-      <div className="p-6 rounded-xl bg-[#0B0E16] border border-white/5">
-        <h3 className="font-semibold mb-4">Quick Actions</h3>
-        <div className="flex flex-wrap gap-3">
-          <Link to="/book" className="px-4 py-2 rounded-lg bg-white/5 text-sm hover:bg-white/10 transition-colors">
-            + New Lead (Test)
-          </Link>
-          <span className="px-4 py-2 rounded-lg bg-white/5 text-sm text-[#A9ACB8]">
-            Manage content from sidebar
-          </span>
-        </div>
-      </div>
-      {!isSupabaseConfigured() && (
-        <div className="mt-6 p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-sm">
-          <p className="font-medium mb-1">Supabase Not Configured</p>
-          <p>Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment to enable database features.</p>
-        </div>
-      )}
+  const cards: Array<[string, number, TabId]> = [
+    ['Total Leads', stats.leads, 'leads'], ['Blog Posts', stats.blogs, 'blog'], ['Published Blogs', stats.publishedBlogs, 'blog'], ['Portfolio Items', stats.portfolio, 'portfolio'], ['Services', stats.services, 'services'], ['Packages', stats.packages, 'packages'],
+  ];
+
+  return <div>
+    <div className="mb-8"><p className="text-[10px] font-bold uppercase tracking-[.2em] text-[#FF6AA7]">Control center</p><h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-bold">Website CMS Dashboard</h2><p className="mt-2 text-sm text-[#A9ACB8]">Publish blog stories and manage website content from one place.</p></div>
+    {!isSupabaseConfigured() && <div className="mb-6 rounded-2xl border border-amber-400/20 bg-amber-400/[0.06] p-4 text-sm text-amber-200">Supabase is not configured.</div>}
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{cards.map(([label, value, tab]) => <button key={label} onClick={() => onNavigate(tab)} className="rounded-2xl border border-white/[0.06] bg-[#0B0E16] p-5 text-left"><p className="text-xs text-white/35">{label}</p><p className="mt-2 text-3xl font-bold">{loading ? '—' : value}</p></button>)}</div>
+    <div className="mt-8 grid gap-6 lg:grid-cols-[1.2fr_.8fr]">
+      <div className="rounded-[24px] border border-white/[0.06] bg-[#0B0E16] p-5"><div className="flex items-center justify-between"><h3 className="font-semibold">Recent blog posts</h3><button onClick={() => onNavigate('blog')} className="text-xs font-semibold text-[#FF7AB5]">Open Blog CMS</button></div><div className="mt-5 space-y-2">{recentBlogs.length === 0 ? <p className="py-8 text-center text-sm text-white/30">No blog posts yet.</p> : recentBlogs.map((post) => <div key={post.id} className="flex items-center gap-3 rounded-xl border border-white/[0.05] px-4 py-3"><BookOpen size={15} className="text-[#FF6AA7]" /><div className="min-w-0 flex-1"><p className="truncate text-sm font-medium">{post.title}</p><p className="text-[10px] text-white/25">{new Date(post.created_at).toLocaleDateString('en-IN')}</p></div><span className="text-[9px] uppercase text-white/40">{post.status}</span></div>)}</div></div>
+      <div className="rounded-[24px] border border-white/[0.06] bg-[#0B0E16] p-5"><h3 className="font-semibold">Quick actions</h3><div className="mt-5 grid gap-2">{[['Create blog post','blog'],['Upload media','media'],['Review leads','leads'],['Edit packages','packages'],['Site settings','settings']].map(([label, tab]) => <button key={label} onClick={() => onNavigate(tab as TabId)} className="rounded-xl border border-white/[0.06] px-4 py-3 text-left text-sm text-white/60 hover:text-white">{label}</button>)}</div></div>
     </div>
-  );
+  </div>;
 }
 
-// Leads content
-function LeadsContent() {
-  const [leads, setLeads] = useState<Array<{id: string; name: string; phone: string; service: string; status: string; created_at: string}>>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchLeads() {
-      if (!isSupabaseConfigured()) { setLoading(false); return; }
-      try {
-        const { data } = await supabase.from('leads').select('id, name, phone, service, status, created_at').order('created_at', { ascending: false }).limit(50);
-        if (data) setLeads(data);
-      } catch { /* ignore */ }
-      setLoading(false);
-    }
-    fetchLeads();
-  }, []);
-
-  return (
-    <div>
-      {loading ? (
-        <div className="flex items-center justify-center py-12"><Loader2 className="animate-spin text-[#A9ACB8]" /></div>
-      ) : leads.length === 0 ? (
-        <div className="text-center py-12 text-[#A9ACB8]">
-          <MessageSquare size={40} className="mx-auto mb-4 opacity-30" />
-          <p>No leads yet. Leads will appear here when submitted through the website.</p>
-        </div>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-white/5">
-                <th className="text-left py-3 px-4 text-[#A9ACB8] font-medium">Name</th>
-                <th className="text-left py-3 px-4 text-[#A9ACB8] font-medium">Phone</th>
-                <th className="text-left py-3 px-4 text-[#A9ACB8] font-medium">Service</th>
-                <th className="text-left py-3 px-4 text-[#A9ACB8] font-medium">Status</th>
-                <th className="text-left py-3 px-4 text-[#A9ACB8] font-medium">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {leads.map((lead) => (
-                <tr key={lead.id} className="border-b border-white/5 hover:bg-white/[0.02]">
-                  <td className="py-3 px-4">{lead.name}</td>
-                  <td className="py-3 px-4">
-                    <a href={`tel:${lead.phone}`} className="text-[#FF3D8D] hover:underline">{lead.phone}</a>
-                  </td>
-                  <td className="py-3 px-4 text-[#A9ACB8]">{lead.service}</td>
-                  <td className="py-3 px-4">
-                    <span className="px-2 py-1 rounded-full bg-white/5 text-xs">{lead.status}</span>
-                  </td>
-                  <td className="py-3 px-4 text-[#A9ACB8]">{new Date(lead.created_at).toLocaleDateString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// Generic placeholder content
-function PlaceholderContent({ title, description }: { title: string; description: string }) {
-  return (
-    <div className="text-center py-12">
-      <Plus size={40} className="mx-auto mb-4 text-[#A9ACB8]/30" />
-      <h3 className="text-lg font-semibold mb-2">{title}</h3>
-      <p className="text-[#A9ACB8] text-sm max-w-md mx-auto">{description}</p>
-    </div>
-  );
-}
-
-// Admin Dashboard (main container)
 export function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState('dashboard');
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'dashboard': return <DashboardContent />;
-      case 'leads': return <LeadsContent />;
-      case 'portfolio': return <PlaceholderContent title="Portfolio Manager" description="Manage your portfolio items, upload media, and organize your work showcase." />;
-      case 'packages': return <PlaceholderContent title="Package Manager" description="Create and manage your service packages, pricing, and features." />;
-      case 'services': return <PlaceholderContent title="Services Manager" description="Manage your service offerings and descriptions." />;
-      case 'testimonials': return <PlaceholderContent title="Testimonials Manager" description="Add and manage client testimonials." />;
-      case 'case-studies': return <PlaceholderContent title="Case Studies Manager" description="Create detailed case studies showcasing your work and results." />;
-      case 'settings': return <PlaceholderContent title="Site Settings" description="Configure site-wide settings, contact info, and social links." />;
-      default: return <DashboardContent />;
-    }
-  };
-
-  return (
-    <AdminLayout activeTab={activeTab} onTabChange={setActiveTab}>
-      {renderContent()}
-    </AdminLayout>
-  );
+  const [activeTab, setActiveTab] = useState<TabId>('dashboard');
+  let content: ReactNode;
+  switch (activeTab) {
+    case 'blog': content = <BlogManager />; break;
+    case 'leads': content = <LeadsManager />; break;
+    case 'media': content = <MediaLibraryManager />; break;
+    case 'portfolio': content = <PortfolioManager />; break;
+    case 'categories': content = <CategoriesManager />; break;
+    case 'services': content = <ServicesManager />; break;
+    case 'packages': content = <PackagesManager />; break;
+    case 'addons': content = <AddonsManager />; break;
+    case 'testimonials': content = <TestimonialsManager />; break;
+    case 'case-studies': content = <CaseStudiesManager />; break;
+    case 'homepage': content = <HomepageManager />; break;
+    case 'metrics': content = <MetricsManager />; break;
+    case 'social': content = <SocialLinksManager />; break;
+    case 'seo': content = <SeoManager />; break;
+    case 'settings': content = <SettingsManager />; break;
+    default: content = <DashboardContent onNavigate={setActiveTab} />;
+  }
+  return <AdminLayout activeTab={activeTab} onTabChange={setActiveTab}>{content}</AdminLayout>;
 }

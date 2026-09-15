@@ -9,6 +9,8 @@ import Portfolio from './pages/Portfolio';
 import Packages from './pages/Packages';
 import Book from './pages/Book';
 import Contact from './pages/Contact';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
 import { InfluencerMarketing, SocialMediaManagement, CaseStudies, Privacy, Terms, NotFound } from './pages/OtherPages';
 import { AdminLogin, AdminDashboard } from './pages/admin/AdminPages';
 
@@ -57,6 +59,8 @@ function App() {
           <Route path="/influencer-marketing" element={<InfluencerMarketing />} />
           <Route path="/social-media-management" element={<SocialMediaManagement />} />
           <Route path="/case-studies" element={<CaseStudies />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/book" element={<Book />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<Privacy />} />
