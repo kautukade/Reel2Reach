@@ -1,9 +1,11 @@
+import { useMemo } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowRight, BarChart3, Camera, Edit, Film, Layers, MessageSquare, Mic, PenTool, Play, ShoppingBag, Sparkles, Users, Video } from 'lucide-react';
+import { ArrowRight, BarChart3, Camera, Edit, Film, Globe, Layers, MessageSquare, Mic, PenTool, Play, ShoppingBag, Sparkles, Users, Video } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ArtHero, CreativeStrip, SectionTitle, TiltSurface } from '../components/common/ArtistExperience';
+import { useDemoCmsRows } from '../lib/useDemoCms';
 
-const mainServices = [
+const defaultMainServices = [
   {
     num: '01',
     title: 'Video Content Creation',
@@ -33,6 +35,16 @@ const mainServices = [
   },
 ];
 
+const serviceIconMap: Record<string, typeof Video> = {
+  film: Film,
+  video: Video,
+  users: Users,
+  globe: Globe,
+  chart: BarChart3,
+  barchart: BarChart3,
+  camera: Camera,
+};
+
 const videoServices = [
   { icon: Film, title: 'Instagram Reels', desc: 'Short-form concepts built around the first three seconds.' },
   { icon: Edit, title: 'Reel Editing', desc: 'Pacing, transitions, typography and sound-led editing.' },
@@ -49,8 +61,36 @@ const videoServices = [
 
 const process = ['BRIEF', 'IDEA', 'SCRIPT', 'SHOT LIST', 'SHOOT', 'EDIT', 'PUBLISH'];
 
+type ServiceRow = { title: string; description?: string; category?: string; icon?: string; status?: string };
+
+function routeForService(title: string, fallback: string) {
+  const value = title.toLowerCase();
+  if (value.includes('influencer')) return '/influencer-marketing';
+  if (value.includes('social')) return '/social-media-management';
+  if (value.includes('video') || value.includes('reel') || value.includes('content')) return '/portfolio';
+  return fallback;
+}
+
 export default function Services() {
   const reduceMotion = useReducedMotion();
+  const { rows: cmsRows, loaded } = useDemoCmsRows<ServiceRow>('services');
+
+  const mainServices = useMemo(() => {
+    const published = cmsRows.filter((row) => row.status !== 'draft');
+    if (!loaded || published.length === 0) return defaultMainServices;
+    return published.map((row, index) => {
+      const visual = defaultMainServices[index % defaultMainServices.length];
+      return {
+        num: String(index + 1).padStart(2, '0'),
+        title: row.title,
+        copy: row.description || visual.copy,
+        icon: serviceIconMap[String(row.icon || '').toLowerCase()] || visual.icon,
+        link: routeForService(row.title, visual.link),
+        accent: visual.accent,
+        tag: row.category ? row.category.toUpperCase() : visual.tag,
+      };
+    });
+  }, [cmsRows, loaded]);
 
   return (
     <div className="pb-16">
@@ -59,7 +99,7 @@ export default function Services() {
         lines={['NOT A MENU OF', 'TASKS. A MENU OF']}
         highlight="POSSIBILITIES."
         description="From one scroll-stopping reel to a complete social presence, we shape the idea, visual language and execution around what the brand needs to say."
-        chips={['VIDEO', 'INFLUENCER', 'SOCIAL', 'CREATIVE DIRECTION']}
+        chips={mainServices.slice(0, 4).map((service) => service.title.toUpperCase())}
         primary={{ label: 'START A PROJECT', to: '/book' }}
         secondary={{ label: 'VIEW PACKAGES', to: '/packages' }}
         visualLabel="SERVICE / 01"
@@ -74,7 +114,7 @@ export default function Services() {
         <div className="pointer-events-none absolute inset-0 cinematic-grid opacity-[0.11]" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionTitle
-            eyebrow="THREE WAYS TO WORK TOGETHER"
+            eyebrow="WAYS TO WORK TOGETHER"
             title="CHOOSE THE"
             highlight="CREATIVE ENGINE"
             copy="Each service has a different purpose, but the visual standard stays the same: intentional, social-native and made to feel current without chasing every trend."
@@ -83,14 +123,14 @@ export default function Services() {
           <div className="mt-14 space-y-6">
             {mainServices.map((service, index) => (
               <motion.article
-                key={service.num}
+                key={`${service.title}-${index}`}
                 initial={{ opacity: 0, y: 54 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-8%' }}
                 transition={{ duration: .8, delay: index * .08, ease: [0.22, 1, 0.36, 1] }}
                 className="group relative overflow-hidden rounded-[32px] border border-white/8 bg-[#0B0E16] p-6 sm:p-8 lg:p-10"
               >
-                <div className="pointer-events-none absolute inset-0 opacity-0 transition duration-700 group-hover:opacity-100" style={{ background: `radial-gradient(circle at 78% 50%, ${index === 1 ? 'rgba(139,92,246,.12)' : 'rgba(255,61,141,.10)'}, transparent 32%)` }} />
+                <div className="pointer-events-none absolute inset-0 opacity-0 transition duration-700 group-hover:opacity-100" style={{ background: `radial-gradient(circle at 78% 50%, ${index % 3 === 1 ? 'rgba(139,92,246,.12)' : 'rgba(255,61,141,.10)'}, transparent 32%)` }} />
                 <div className="relative grid gap-10 lg:grid-cols-[1fr_.8fr] lg:items-center">
                   <div>
                     <div className="flex items-center gap-4">
