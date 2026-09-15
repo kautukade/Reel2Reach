@@ -1,5 +1,5 @@
-import ProfessionalHome from '../components/home/ProfessionalHome';
+import EditorialHome from '../components/home/EditorialHome';
 
 export default function Home() {
-  return <ProfessionalHome />;
+  return <EditorialHome />;
 }
