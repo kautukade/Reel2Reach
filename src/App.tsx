@@ -11,7 +11,8 @@ import Book from './pages/Book';
 import Contact from './pages/Contact';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
-import { InfluencerMarketing, SocialMediaManagement, CaseStudies, Privacy, Terms, NotFound } from './pages/OtherPages';
+import CaseStudies from './pages/CaseStudies';
+import { InfluencerMarketing, SocialMediaManagement, Privacy, Terms, NotFound } from './pages/OtherPages';
 import { AdminLogin, AdminDashboard } from './pages/admin/AdminPages';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
