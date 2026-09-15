@@ -1,29 +1,59 @@
 import { Link } from 'react-router-dom';
 import { Instagram, Mail, Phone, ArrowRight } from 'lucide-react';
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
 
 export default function Footer() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
+
   return (
     <footer className="bg-[#07090F] border-t border-white/5">
       {/* CTA Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
         <div className="text-center">
-          <h2 className="font-[family-name:var(--font-display)] text-3xl sm:text-4xl lg:text-6xl font-bold leading-tight">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="font-[family-name:var(--font-display)] text-3xl sm:text-4xl lg:text-6xl font-bold leading-tight"
+          >
             READY TO MAKE<br />
             YOUR BRAND<br />
             <span className="gradient-text">IMPOSSIBLE TO IGNORE?</span>
-          </h2>
-          <Link
-            to="/book"
-            className="inline-flex items-center gap-2 mt-8 px-8 py-4 rounded-full bg-gradient-to-r from-[#FF5A5F] to-[#FF3D8D] text-white font-semibold text-lg hover:shadow-lg hover:shadow-pink-500/25 transition-all duration-300"
+          </motion.h2>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
           >
-            BOOK A COLLAB <ArrowRight size={20} />
-          </Link>
+            <Link
+              to="/book"
+              className="group inline-flex items-center gap-2 mt-8 px-8 py-4 rounded-full bg-gradient-to-r from-[#FF5A5F] to-[#FF3D8D] text-white font-semibold text-lg hover:shadow-lg hover:shadow-pink-500/25 transition-all duration-300"
+            >
+              BOOK A COLLAB <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </motion.div>
         </div>
       </div>
 
       {/* Footer Links */}
       <div className="border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+        <div ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+          {/* Large brand text */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ duration: 1 }}
+            className="text-center mb-12"
+          >
+            <div className="font-[family-name:var(--font-display)] text-6xl sm:text-8xl lg:text-9xl font-bold text-white/5">
+              REEL2REACH
+            </div>
+          </motion.div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
             <div>
               <div className="flex items-center gap-2 mb-4">
@@ -78,9 +108,9 @@ export default function Footer() {
                     href="https://instagram.com/ashwini_rathod_19"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-[#A9ACB8] hover:text-white text-sm transition-colors"
+                    className="flex items-center gap-2 text-[#A9ACB8] hover:text-white text-sm transition-colors group"
                   >
-                    <Instagram size={16} /> @ashwini_rathod_19
+                    <Instagram size={16} className="group-hover:rotate-12 transition-transform" /> @ashwini_rathod_19
                   </a>
                 </li>
                 <li>
