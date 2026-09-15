@@ -20,6 +20,7 @@ import {
   MessageSquare,
   Package,
   Puzzle,
+  RefreshCcw,
   SearchCheck,
   Settings,
   Share2,
@@ -27,7 +28,13 @@ import {
   Users,
   X,
 } from 'lucide-react';
-import { isSupabaseConfigured, supabase } from '../../lib/supabase';
+import {
+  DEMO_ADMIN_EMAIL,
+  DEMO_ADMIN_PASSWORD,
+  isSupabaseConfigured,
+  resetBrowserDemoData,
+  supabase,
+} from '../../lib/supabase';
 import BlogManager from './BlogManager';
 import {
   AddonsManager,
@@ -47,8 +54,8 @@ import {
 } from './AdminManagers';
 
 export function AdminLogin() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState(DEMO_ADMIN_EMAIL);
+  const [password, setPassword] = useState(DEMO_ADMIN_PASSWORD);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -58,7 +65,7 @@ export function AdminLogin() {
     setError('');
     setLoading(true);
     if (!isSupabaseConfigured()) {
-      setError('Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY first.');
+      setError('Browser demo storage is unavailable in this browser.');
       setLoading(false);
       return;
     }
@@ -81,16 +88,20 @@ export function AdminLogin() {
       <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} className="relative w-full max-w-md">
         <div className="mb-8 text-center">
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FF5A5F] via-[#FF3D8D] to-[#8B5CF6] shadow-[0_20px_55px_rgba(255,61,141,.2)]"><span className="font-bold">R2</span></div>
-          <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold">Reel2Reach CMS</h1>
-          <p className="mt-2 text-sm text-[#A9ACB8]">Manage blogs, media, leads and website content.</p>
+          <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold">Reel2Reach Demo CMS</h1>
+          <p className="mt-2 text-sm text-[#A9ACB8]">Fully working client demo. No Supabase or server required.</p>
         </div>
         <form onSubmit={handleLogin} className="space-y-4 rounded-[26px] border border-white/[0.07] bg-[#0B0E16]/90 p-7 shadow-2xl backdrop-blur-xl">
+          <div className="rounded-xl border border-emerald-400/15 bg-emerald-400/[0.05] px-4 py-3 text-xs leading-5 text-emerald-200/80">
+            Demo login is already filled. Data is saved only in this browser, so you can safely create, edit, upload and delete during the client presentation.
+          </div>
           {error && <div className="flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-300"><AlertCircle size={16} className="mt-0.5 shrink-0" />{error}</div>}
           <div><label className="mb-2 block text-xs font-semibold text-white/65">Email</label><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" className="creative-input" /></div>
           <div><label className="mb-2 block text-xs font-semibold text-white/65">Password</label><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" className="creative-input" /></div>
-          <button type="submit" disabled={loading} className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#FF5A5F] to-[#FF3D8D] py-3 text-sm font-semibold disabled:opacity-50">{loading ? <Loader2 size={17} className="animate-spin" /> : 'Sign In'}</button>
+          <button type="submit" disabled={loading} className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#FF5A5F] to-[#FF3D8D] py-3 text-sm font-semibold disabled:opacity-50">{loading ? <Loader2 size={17} className="animate-spin" /> : 'Open Demo Admin'}</button>
         </form>
-        <p className="mt-6 text-center text-xs text-white/35"><Link to="/" className="hover:text-white">← Back to website</Link></p>
+        <p className="mt-4 text-center text-[10px] uppercase tracking-[.16em] text-white/25">Browser-only demo · localStorage + IndexedDB</p>
+        <p className="mt-4 text-center text-xs text-white/35"><Link to="/" className="hover:text-white">← Back to website</Link></p>
       </motion.div>
     </div>
   );
@@ -131,7 +142,7 @@ function AdminLayout({ children, activeTab, onTabChange }: { children: ReactNode
     <div className="flex min-h-screen bg-[#07090F] text-white">
       <aside className={`fixed inset-y-0 left-0 z-[70] flex w-[286px] flex-col border-r border-white/[0.06] bg-[#090C13] transition-transform lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-5">
-          <div className="flex items-center gap-3"><div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#FF5A5F] to-[#8B5CF6] text-xs font-bold">R2</div><div><p className="font-bold leading-none">Reel2Reach</p><p className="mt-1 text-[9px] uppercase tracking-[.2em] text-white/25">Content OS</p></div></div>
+          <div className="flex items-center gap-3"><div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#FF5A5F] to-[#8B5CF6] text-xs font-bold">R2</div><div><p className="font-bold leading-none">Reel2Reach</p><p className="mt-1 text-[9px] uppercase tracking-[.2em] text-white/25">Browser Demo OS</p></div></div>
           <button onClick={() => setSidebarOpen(false)} className="text-white/45 lg:hidden"><X size={19} /></button>
         </div>
         <div className="flex-1 overflow-y-auto px-3 py-4">
@@ -148,7 +159,7 @@ function AdminLayout({ children, activeTab, onTabChange }: { children: ReactNode
         <header className="sticky top-0 z-50 flex h-16 items-center gap-4 border-b border-white/[0.06] bg-[#07090F]/88 px-4 backdrop-blur-2xl sm:px-6 lg:h-20 lg:px-8">
           <button onClick={() => setSidebarOpen(true)} className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-white/60 lg:hidden"><Menu size={19} /></button>
           <div><p className="text-[9px] font-bold uppercase tracking-[.18em] text-white/25">Admin / {active?.group}</p><h1 className="mt-0.5 font-semibold">{active?.label}</h1></div>
-          <span className="ml-auto hidden items-center gap-2 rounded-full border border-emerald-400/15 bg-emerald-400/[0.04] px-3 py-1.5 text-[10px] font-semibold text-emerald-300 sm:inline-flex"><Database size={12} />Supabase CMS</span>
+          <span className="ml-auto hidden items-center gap-2 rounded-full border border-emerald-400/15 bg-emerald-400/[0.04] px-3 py-1.5 text-[10px] font-semibold text-emerald-300 sm:inline-flex"><Database size={12} />Browser Demo · Local Data</span>
         </header>
         <main className="mx-auto max-w-[1500px] p-4 sm:p-6 lg:p-8">{children}</main>
       </div>
@@ -189,9 +200,18 @@ function DashboardContent({ onNavigate }: { onNavigate: (tab: TabId) => void }) 
     ['Total Leads', stats.leads, 'leads'], ['Blog Posts', stats.blogs, 'blog'], ['Published Blogs', stats.publishedBlogs, 'blog'], ['Portfolio Items', stats.portfolio, 'portfolio'], ['Services', stats.services, 'services'], ['Packages', stats.packages, 'packages'],
   ];
 
+  const resetDemo = () => {
+    if (!window.confirm('Reset all demo CMS records in this browser? Uploaded media files remain in browser storage, but CMS records and login session will reset.')) return;
+    resetBrowserDemoData();
+    window.location.assign('/admin');
+  };
+
   return <div>
-    <div className="mb-8"><p className="text-[10px] font-bold uppercase tracking-[.2em] text-[#FF6AA7]">Control center</p><h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-bold">Website CMS Dashboard</h2><p className="mt-2 text-sm text-[#A9ACB8]">Publish blog stories and manage website content from one place.</p></div>
-    {!isSupabaseConfigured() && <div className="mb-6 rounded-2xl border border-amber-400/20 bg-amber-400/[0.06] p-4 text-sm text-amber-200">Supabase is not configured.</div>}
+    <div className="mb-8"><p className="text-[10px] font-bold uppercase tracking-[.2em] text-[#FF6AA7]">Control center</p><h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-bold">Website Demo CMS Dashboard</h2><p className="mt-2 text-sm text-[#A9ACB8]">Publish blog stories and manage website content from one place — entirely inside this browser.</p></div>
+    <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-emerald-400/15 bg-emerald-400/[0.045] p-4 text-sm text-emerald-100/80 sm:flex-row sm:items-center sm:justify-between">
+      <div><p className="font-semibold text-emerald-200">Browser demo mode is active.</p><p className="mt-1 text-xs leading-5 text-emerald-100/55">CMS records use localStorage. Uploaded photos/videos use IndexedDB. Refreshing the page keeps the demo data on this browser.</p></div>
+      <button onClick={resetDemo} className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full border border-white/10 bg-black/10 px-4 py-2 text-xs font-semibold text-white/65 transition hover:text-white"><RefreshCcw size={13} />Reset Demo</button>
+    </div>
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{cards.map(([label, value, tab]) => <button key={label} onClick={() => onNavigate(tab)} className="rounded-2xl border border-white/[0.06] bg-[#0B0E16] p-5 text-left"><p className="text-xs text-white/35">{label}</p><p className="mt-2 text-3xl font-bold">{loading ? '—' : value}</p></button>)}</div>
     <div className="mt-8 grid gap-6 lg:grid-cols-[1.2fr_.8fr]">
       <div className="rounded-[24px] border border-white/[0.06] bg-[#0B0E16] p-5"><div className="flex items-center justify-between"><h3 className="font-semibold">Recent blog posts</h3><button onClick={() => onNavigate('blog')} className="text-xs font-semibold text-[#FF7AB5]">Open Blog CMS</button></div><div className="mt-5 space-y-2">{recentBlogs.length === 0 ? <p className="py-8 text-center text-sm text-white/30">No blog posts yet.</p> : recentBlogs.map((post) => <div key={post.id} className="flex items-center gap-3 rounded-xl border border-white/[0.05] px-4 py-3"><BookOpen size={15} className="text-[#FF6AA7]" /><div className="min-w-0 flex-1"><p className="truncate text-sm font-medium">{post.title}</p><p className="text-[10px] text-white/25">{new Date(post.created_at).toLocaleDateString('en-IN')}</p></div><span className="text-[9px] uppercase text-white/40">{post.status}</span></div>)}</div></div>
