@@ -1,0 +1,258 @@
+/* Reel2Reach mobile art-direction pass. Loaded after the base and premium styles. */
+
+@media (max-width: 1023px) {
+  /* Turn the header into a compact floating studio bar instead of a desktop strip. */
+  nav.fixed.left-0.right-0.top-0 {
+    padding: calc(env(safe-area-inset-top) + 8px) 12px 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  nav.fixed.left-0.right-0.top-0 > div {
+    max-width: none !important;
+    padding-left: 12px !important;
+    padding-right: 8px !important;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 20px;
+    background: rgba(7,9,15,.80);
+    box-shadow: 0 18px 55px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.035);
+    backdrop-filter: blur(22px) saturate(125%);
+    -webkit-backdrop-filter: blur(22px) saturate(125%);
+  }
+
+  nav.fixed.left-0.right-0.top-0 > div > div {
+    height: 62px !important;
+  }
+
+  nav.fixed.left-0.right-0.top-0 button[aria-label='Open menu'],
+  nav.fixed.left-0.right-0.top-0 button[aria-label='Close menu'] {
+    width: 40px !important;
+    height: 40px !important;
+    border-color: rgba(255,255,255,.09) !important;
+    background: rgba(255,255,255,.045) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
+  }
+}
+
+@media (max-width: 767px) {
+  .site-shell {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+
+  main {
+    min-width: 0;
+  }
+
+  /* Give every public page cleaner phone rhythm. */
+  main section {
+    scroll-margin-top: 88px;
+  }
+
+  main p {
+    max-width: 100%;
+  }
+
+  /* Homepage hero: editorial first, visual second, no desktop-looking empty zone. */
+  .r2r-home-mobile > div > section:first-child {
+    min-height: auto !important;
+  }
+
+  .r2r-home-mobile > div > section:first-child > div:nth-child(2) {
+    min-height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 22px !important;
+    padding-top: calc(6.9rem + env(safe-area-inset-top)) !important;
+    padding-bottom: 5.75rem !important;
+  }
+
+  .r2r-home-mobile > div > section:first-child > div:nth-child(2) > div:first-child {
+    width: 100%;
+  }
+
+  .r2r-home-mobile > div > section:first-child h1 {
+    font-size: clamp(3.45rem, 18.5vw, 5.35rem) !important;
+    line-height: .78 !important;
+    letter-spacing: -.068em !important;
+  }
+
+  .r2r-home-mobile > div > section:first-child p {
+    line-height: 1.65;
+  }
+
+  .r2r-home-mobile > div > section:first-child > div:nth-child(2) > div:nth-child(2) {
+    display: flex !important;
+    height: 300px;
+    align-items: flex-start !important;
+    justify-content: flex-end !important;
+    overflow: visible;
+    padding-right: 4vw;
+    margin-top: 2px;
+    pointer-events: none;
+  }
+
+  .r2r-home-mobile > div > section:first-child > div:nth-child(2) > div:nth-child(2) > div {
+    width: min(49vw, 196px) !important;
+    box-shadow: 0 30px 90px rgba(0,0,0,.48) !important;
+  }
+
+  /* Keep the lower sections dense and magazine-like on a phone. */
+  .r2r-home-mobile > div > section:not(:first-child) {
+    padding-top: 4.75rem !important;
+    padding-bottom: 4.75rem !important;
+  }
+
+  .r2r-home-mobile > div > section:not(:first-child) h2 {
+    font-size: clamp(3rem, 13.8vw, 4.6rem) !important;
+    line-height: .84 !important;
+    letter-spacing: -.055em !important;
+  }
+
+  /* Service rows become compact editorial list items rather than tall stacked cards. */
+  .r2r-home-mobile > div > section:nth-of-type(3) a.group.grid {
+    grid-template-columns: 44px minmax(0,1fr) 24px !important;
+    column-gap: 12px !important;
+    row-gap: 10px !important;
+    padding: 22px 4px !important;
+    align-items: start !important;
+  }
+
+  .r2r-home-mobile > div > section:nth-of-type(3) a.group.grid > span:first-child {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    font-size: 2rem !important;
+    line-height: 1;
+  }
+
+  .r2r-home-mobile > div > section:nth-of-type(3) a.group.grid > div {
+    grid-column: 2;
+    grid-row: 1;
+    gap: 10px !important;
+  }
+
+  .r2r-home-mobile > div > section:nth-of-type(3) a.group.grid > div h3 {
+    font-size: 1.3rem !important;
+    line-height: 1.02 !important;
+  }
+
+  .r2r-home-mobile > div > section:nth-of-type(3) a.group.grid > p {
+    grid-column: 2 / 4;
+    grid-row: 2;
+    font-size: .83rem !important;
+    line-height: 1.55 !important;
+  }
+
+  .r2r-home-mobile > div > section:nth-of-type(3) a.group.grid > svg {
+    grid-column: 3;
+    grid-row: 1;
+    margin-top: 2px;
+  }
+
+  .r2r-home-mobile article[class*='min-h-[440px]'] {
+    min-height: 360px !important;
+  }
+
+  /* ArtHero pages: better text/CTA density with the 3D canvas still visible. */
+  main > div > section:first-child[class*='min-h-[100svh]'] > div:nth-child(2) {
+    padding-top: calc(7.1rem + env(safe-area-inset-top)) !important;
+    padding-bottom: 5.5rem !important;
+  }
+
+  main > div > section:first-child[class*='min-h-[100svh]'] h1 {
+    max-width: 100%;
+  }
+
+  /* Forms and cards should feel like native touch UI. */
+  input,
+  textarea,
+  select,
+  button {
+    border-radius: max(12px, .75rem);
+  }
+
+  input,
+  select,
+  button {
+    min-height: 44px;
+  }
+
+  /* Make media grids use the available width without edge crowding. */
+  img,
+  video,
+  canvas {
+    border-radius: inherit;
+  }
+
+  footer {
+    padding-bottom: 8px;
+  }
+}
+
+@media (max-width: 479px) {
+  /* Thumb-friendly hero actions. */
+  .r2r-home-mobile > div > section:first-child a[href='/portfolio'],
+  .r2r-home-mobile > div > section:first-child a[href='/book'] {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .r2r-home-mobile > div > section:first-child > div:nth-child(2) > div:first-child > div:last-child {
+    width: 100%;
+  }
+
+  .r2r-home-mobile > div > section:first-child > div:nth-child(2) > div:nth-child(2) {
+    height: 275px;
+    padding-right: 2vw;
+  }
+
+  .r2r-home-mobile > div > section:first-child > div:nth-child(2) > div:nth-child(2) > div {
+    width: min(52vw, 186px) !important;
+  }
+
+  /* Keep labels elegant on genuinely narrow screens. */
+  .r2r-home-mobile [class*='tracking-[.28em]'],
+  .r2r-home-mobile [class*='tracking-[.24em]'],
+  .r2r-home-mobile [class*='tracking-[.22em]'] {
+    letter-spacing: .14em !important;
+  }
+
+  .mobile-conversion-bar {
+    left: 8px !important;
+    right: 8px !important;
+  }
+}
+
+@media (max-width: 359px) {
+  nav.fixed.left-0.right-0.top-0 {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  nav.fixed.left-0.right-0.top-0 > div {
+    padding-left: 9px !important;
+    padding-right: 6px !important;
+  }
+
+  .r2r-home-mobile > div > section:first-child h1 {
+    font-size: clamp(3rem, 18vw, 4rem) !important;
+  }
+
+  .r2r-home-mobile > div > section:first-child > div:nth-child(2) {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
+  .r2r-home-mobile > div > section:first-child > div:nth-child(2) {
+    padding-top: 6.2rem !important;
+  }
+
+  .r2r-home-mobile > div > section:first-child > div:nth-child(2) > div:nth-child(2) {
+    display: none !important;
+  }
+}

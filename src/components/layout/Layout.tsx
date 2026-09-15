@@ -21,7 +21,7 @@ export default function Layout() {
   }, [location.pathname]);
 
   return (
-    <div className="relative min-h-screen overflow-x-clip bg-[#07090F] text-white">
+    <div className="site-shell relative min-h-screen overflow-x-clip bg-[#07090F] text-white">
       <ScrollProgress />
       <GlobalMotionStage />
       <PremiumExperience />
