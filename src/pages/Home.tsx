@@ -1,9 +1,5 @@
-import EditorialHome from '../components/home/EditorialHome';
+import DirectorCutHome from '../components/home/DirectorCutHome';
 
 export default function Home() {
-  return (
-    <div className="r2r-home-mobile">
-      <EditorialHome />
-    </div>
-  );
+  return <DirectorCutHome />;
 }
