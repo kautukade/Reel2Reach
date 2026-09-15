@@ -55,6 +55,7 @@ function DemoReel({ item, index, onOpen }: { item: DemoWork; index: number; onOp
 
 function PublishedWork({ items }: { items: PortfolioRow[] }) {
   const reduceMotion = useReducedMotion();
+  const prefersReducedMotion = Boolean(reduceMotion);
   if (!items.length) return null;
   return (
     <section className="relative overflow-hidden border-b border-white/[0.05] bg-[#080A10] py-24 lg:py-32">
@@ -68,7 +69,7 @@ function PublishedWork({ items }: { items: PortfolioRow[] }) {
           {items.map((item, index) => (
             <motion.article key={item.id} initial={{ opacity: 0, y: 36 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * .06 }} className="group overflow-hidden rounded-[28px] border border-white/8 bg-[#0B0E16]">
               <div className="relative aspect-[4/5] overflow-hidden bg-gradient-to-br from-[#201129] via-[#111526] to-[#07090F]">
-                {item.video_url ? <video src={item.video_url} poster={item.thumbnail_url || undefined} muted loop playsInline autoPlay={!reduceMotion} controls={reduceMotion} preload="metadata" className="h-full w-full object-cover" /> : item.thumbnail_url ? <img src={item.thumbnail_url} alt={item.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.035]" /> : <div className="absolute inset-0 cinematic-grid opacity-20" />}
+                {item.video_url ? <video src={item.video_url} poster={item.thumbnail_url || undefined} muted loop playsInline autoPlay={!prefersReducedMotion} controls={prefersReducedMotion} preload="metadata" className="h-full w-full object-cover" /> : item.thumbnail_url ? <img src={item.thumbnail_url} alt={item.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.035]" /> : <div className="absolute inset-0 cinematic-grid opacity-20" />}
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#07090F] via-transparent to-transparent" />
                 {item.featured && <span className="absolute left-4 top-4 rounded-full border border-white/15 bg-black/35 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[.16em] backdrop-blur-xl">Featured</span>}
                 <div className="absolute inset-x-5 bottom-5">
