@@ -6,6 +6,7 @@ import Footer from './Footer';
 import WhatsAppButton from '../common/WhatsAppButton';
 import ScrollProgress from '../common/ScrollProgress';
 import GlobalMotionStage from '../common/GlobalMotionStage';
+import PremiumExperience from '../common/PremiumExperience';
 
 export default function Layout() {
   const location = useLocation();
@@ -19,6 +20,7 @@ export default function Layout() {
     <div className="relative min-h-screen overflow-x-clip bg-[#07090F] text-white">
       <ScrollProgress />
       <GlobalMotionStage />
+      <PremiumExperience />
       <div aria-hidden="true" className="site-noise pointer-events-none fixed inset-0 z-[90]" />
 
       <div className="relative z-10">
