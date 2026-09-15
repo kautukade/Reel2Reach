@@ -41,13 +41,13 @@ export default function WhatsAppButton() {
         </motion.a>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-[#07090F]/92 pb-[env(safe-area-inset-bottom)] backdrop-blur-2xl md:hidden">
-        <div className="grid grid-cols-2">
-          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex min-h-14 items-center justify-center gap-2 px-3 text-sm font-semibold text-[#8BF0A9]" aria-label="Chat on WhatsApp">
-            <MessageCircle size={18} /> WhatsApp
+      <div className="mobile-conversion-bar fixed bottom-[calc(.65rem+env(safe-area-inset-bottom))] left-3 right-3 z-50 rounded-[22px] border border-white/10 bg-[#090B12]/92 p-1.5 shadow-[0_22px_70px_rgba(0,0,0,.48)] backdrop-blur-2xl md:hidden">
+        <div className="grid grid-cols-[.92fr_1.08fr] gap-1.5">
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center justify-center gap-2 rounded-[16px] border border-white/[0.06] bg-white/[0.035] px-3 text-[13px] font-semibold text-[#9CF5B5] transition active:scale-[.98]" aria-label="Chat on WhatsApp">
+            <MessageCircle size={17} /> WhatsApp
           </a>
-          <Link to="/book" className="flex min-h-14 items-center justify-center gap-2 bg-gradient-to-r from-[#FF5A5F] to-[#FF3D8D] px-3 text-sm font-semibold text-white">
-            Book Now <span aria-hidden="true">→</span>
+          <Link to="/book" className="flex min-h-12 items-center justify-center gap-2 rounded-[16px] bg-gradient-to-r from-[#FF5A5F] via-[#FF3D8D] to-[#8B5CF6] px-3 text-[13px] font-bold text-white shadow-[0_10px_28px_rgba(255,61,141,.22)] transition active:scale-[.98]">
+            Start a Project <span aria-hidden="true">→</span>
           </Link>
         </div>
       </div>
