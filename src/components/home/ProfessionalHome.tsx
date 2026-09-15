@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, Camera, Film, Play, Sparkles, Users, WandSparkles } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Camera, Film, Play, Sparkles, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import WebGLArtScene from '../common/WebGLArtScene';
 import { DemoBadge } from '../common/ArtistExperience';
@@ -24,7 +24,7 @@ const services = [
     number: '03',
     title: 'Social Art Direction',
     copy: 'A visual language for the whole feed: content rhythm, posts, launches, recurring formats and campaign direction.',
-    icon: WandSparkles,
+    icon: Sparkles,
     to: '/social-media-management',
   },
 ];
