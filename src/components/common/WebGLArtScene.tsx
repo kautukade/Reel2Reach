@@ -229,16 +229,27 @@ export default function WebGLArtScene({ variant = 'hero', className = '' }: Prop
     const coarse = window.matchMedia('(pointer: coarse)').matches;
     const targetMouse = { x: 0, y: 0 };
     const mouse = { x: 0, y: 0 };
+    let inViewport = true;
+    let lastDraw = 0;
+
     const onPointerMove = (event: PointerEvent) => {
       const rect = canvas.getBoundingClientRect();
       targetMouse.x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
       targetMouse.y = -(((event.clientY - rect.top) / rect.height - 0.5) * 2);
     };
-    if (!coarse) canvas.addEventListener('pointermove', onPointerMove);
+    const onPointerLeave = () => {
+      targetMouse.x = 0;
+      targetMouse.y = 0;
+    };
+    if (!coarse) {
+      canvas.addEventListener('pointermove', onPointerMove);
+      canvas.addEventListener('pointerleave', onPointerLeave);
+    }
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.0 : 1.45);
+      const qualityCap = coarse ? 0.9 : 1.35;
+      const dpr = Math.min(window.devicePixelRatio || 1, qualityCap);
       const width = Math.max(1, Math.floor(rect.width * dpr));
       const height = Math.max(1, Math.floor(rect.height * dpr));
       if (canvas.width !== width || canvas.height !== height) {
@@ -251,17 +262,27 @@ export default function WebGLArtScene({ variant = 'hero', className = '' }: Prop
     ro.observe(canvas);
     resize();
 
+    const io = new IntersectionObserver(([entry]) => {
+      inViewport = entry.isIntersecting;
+    }, { rootMargin: '180px 0px' });
+    io.observe(canvas);
+
     const start = performance.now();
     let raf = 0;
     const render = (now: number) => {
-      resize();
-      mouse.x += (targetMouse.x - mouse.x) * 0.045;
-      mouse.y += (targetMouse.y - mouse.y) * 0.045;
-      gl.useProgram(program);
-      gl.uniform2f(resLoc, canvas.width, canvas.height);
-      gl.uniform1f(timeLoc, reduceMotion ? 0.0 : (now - start) / 1000);
-      gl.uniform2f(mouseLoc, reduceMotion ? 0 : mouse.x, reduceMotion ? 0 : mouse.y);
-      gl.drawArrays(gl.TRIANGLES, 0, 6);
+      const targetFrameMs = reduceMotion ? 500 : coarse ? 33 : 16;
+      const shouldDraw = inViewport && !document.hidden && now - lastDraw >= targetFrameMs;
+      if (shouldDraw) {
+        lastDraw = now;
+        resize();
+        mouse.x += (targetMouse.x - mouse.x) * 0.045;
+        mouse.y += (targetMouse.y - mouse.y) * 0.045;
+        gl.useProgram(program);
+        gl.uniform2f(resLoc, canvas.width, canvas.height);
+        gl.uniform1f(timeLoc, reduceMotion ? 0.0 : (now - start) / 1000);
+        gl.uniform2f(mouseLoc, reduceMotion ? 0 : mouse.x, reduceMotion ? 0 : mouse.y);
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+      }
       raf = requestAnimationFrame(render);
     };
     raf = requestAnimationFrame(render);
@@ -269,7 +290,11 @@ export default function WebGLArtScene({ variant = 'hero', className = '' }: Prop
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
-      if (!coarse) canvas.removeEventListener('pointermove', onPointerMove);
+      io.disconnect();
+      if (!coarse) {
+        canvas.removeEventListener('pointermove', onPointerMove);
+        canvas.removeEventListener('pointerleave', onPointerLeave);
+      }
       gl.deleteBuffer(buffer);
       gl.deleteProgram(program);
       gl.deleteShader(vs);
