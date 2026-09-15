@@ -2,24 +2,56 @@
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; background: #07090F; }
+html {
+  scroll-behavior: smooth;
+  background: #07090F;
+  width: 100%;
+  max-width: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 
 body {
   margin: 0;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   font-family: 'Inter', sans-serif;
   background-color: #07090F;
   color: #FFFFFF;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
-h1, h2, h3, h4, h5, h6 { font-family: 'Space Grotesk', sans-serif; }
+#root {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Grotesk', sans-serif;
+  overflow-wrap: break-word;
+}
+
+p, li, a, button, label, span { overflow-wrap: break-word; }
 button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
+button, a { touch-action: manipulation; }
 .font-display { font-family: 'Space Grotesk', sans-serif; }
 :root { --font-display: 'Space Grotesk', sans-serif; }
 
-::-webkit-scrollbar { width: 6px; }
+img, video {
+  max-width: 100%;
+  height: auto;
+  -webkit-user-drag: none;
+}
+
+canvas, iframe { max-width: 100%; }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: #0B0E16; }
 ::-webkit-scrollbar-thumb { background: linear-gradient(#3d253f, #33294e); border-radius: 999px; }
 ::-webkit-scrollbar-thumb:hover { background: linear-gradient(#5b3158, #433566); }
@@ -140,6 +172,7 @@ button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
 
 .creative-input {
   width: 100%;
+  max-width: 100%;
   border-radius: 0.85rem;
   border: 1px solid rgba(255,255,255,0.1);
   background: rgba(255,255,255,0.025);
@@ -157,7 +190,110 @@ button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
 
 ::selection { background: rgba(255, 61, 141, 0.34); color: #fff; }
 *:focus-visible { outline: 2px solid #FF3D8D; outline-offset: 3px; }
-img, video { -webkit-user-drag: none; }
+
+/* Responsive safety layer for the public site + browser demo CMS. */
+[class*="overflow-x-auto"] {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+@media (max-width: 1023px) {
+  .global-film-vignette {
+    background:
+      radial-gradient(circle at 50% 38%, transparent 0%, rgba(7,9,15,.08) 44%, rgba(7,9,15,.72) 100%),
+      linear-gradient(90deg, rgba(7,9,15,.35), transparent 20%, transparent 80%, rgba(7,9,15,.35));
+  }
+}
+
+@media (max-width: 767px) {
+  .site-noise { opacity: 0.018; }
+  .cinematic-grid { background-size: 38px 38px; }
+  .reel-card-grid { background-size: 22px 22px; }
+
+  /* Make the sticky three-reel home sequence read as intentional overlap on phones. */
+  section[class*="h-[210vh]"] { height: 175vh !important; }
+  section[class*="h-[210vh]"] > div[class*="sticky"] > div[class*="h-[56vh]"] {
+    width: 100vw !important;
+    height: 54vh !important;
+    max-width: 100vw !important;
+    margin-top: 7rem !important;
+  }
+  section[class*="h-[210vh]"] div[class*="left-[2%]"][class*="w-[29%]"] {
+    left: 1% !important;
+    top: 18% !important;
+    width: 54% !important;
+    height: 64% !important;
+  }
+  section[class*="h-[210vh]"] div[class*="left-[35.5%]"][class*="w-[29%]"] {
+    left: 23% !important;
+    top: 5% !important;
+    width: 54% !important;
+    height: 78% !important;
+  }
+  section[class*="h-[210vh]"] div[class*="right-[2%]"][class*="w-[29%]"] {
+    right: 1% !important;
+    top: 20% !important;
+    width: 54% !important;
+    height: 64% !important;
+  }
+
+  /* Prevent over-sized art cards from forcing awkward phone scroll. */
+  [class*="min-h-[430px]"] { min-height: 360px !important; }
+  [class*="min-h-[520px]"] { min-height: 390px !important; }
+  [class*="min-h-[620px]"] { min-height: 430px !important; }
+  [class*="min-w-[620px]"] { min-width: 430px !important; }
+
+  /* Admin/CMS tables stay usable with touch horizontal scrolling. */
+  table { border-collapse: collapse; }
+  table th, table td { white-space: nowrap; }
+}
+
+@media (max-width: 639px) {
+  body { overscroll-behavior-y: none; }
+
+  h1 { text-wrap: balance; }
+  h2, h3 { text-wrap: pretty; }
+
+  .creative-input {
+    min-height: 48px;
+    padding: 0.9rem 0.95rem;
+    font-size: 16px;
+  }
+  textarea.creative-input {
+    min-height: 128px;
+    line-height: 1.55;
+  }
+
+  /* Reduce giant desktop radii so cards use small screens efficiently. */
+  [class*="rounded-[36px]"],
+  [class*="rounded-[34px]"],
+  [class*="rounded-[32px]"],
+  [class*="rounded-[30px]"],
+  [class*="rounded-[28px]"] {
+    border-radius: 1.35rem !important;
+  }
+
+  /* Sticky home showreel labels remain legible in overlapping phone cards. */
+  section[class*="h-[210vh]"] div[class*="tracking-[.2em]"] { letter-spacing: .08em !important; }
+  section[class*="h-[210vh]"] div[class*="bottom-[3%]"] {
+    bottom: 0 !important;
+    width: calc(100% - 2rem);
+    padding-left: .75rem !important;
+    padding-right: .75rem !important;
+    text-align: center;
+    white-space: normal;
+    line-height: 1.45;
+  }
+
+  .artist-marquee { animation-duration: 40s; }
+}
+
+@media (max-width: 380px) {
+  .creative-input { padding-left: .8rem; padding-right: .8rem; }
+  [class*="tracking-[.3em]"] { letter-spacing: .18em !important; }
+  [class*="tracking-[.28em]"] { letter-spacing: .16em !important; }
+  [class*="tracking-[.25em]"] { letter-spacing: .14em !important; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -181,4 +317,5 @@ img, video { -webkit-user-drag: none; }
 
 @media (pointer: coarse) {
   .phone-shell::after { opacity: 0.5; }
+  [style*="transformPerspective"] { transform: none !important; }
 }
