@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { ArrowUpRight, Menu, X } from 'lucide-react';
 
 const navLinks = [
   { label: 'Home', path: '/' },
@@ -17,78 +17,111 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => setScrolled(window.scrollY > 28);
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
     setMobileOpen(false);
-  }, [location]);
+  }, [location.pathname]);
 
   useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => {
       document.body.style.overflow = '';
-    }
-    return () => { document.body.style.overflow = ''; };
+    };
   }, [mobileOpen]);
 
   return (
     <>
       <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? 'glass' : 'bg-transparent'
+        initial={reduceMotion ? false : { y: -90, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className={`fixed left-0 right-0 top-0 z-50 transition-all duration-500 ${
+          scrolled
+            ? 'border-b border-white/[0.06] bg-[#07090F]/78 shadow-[0_18px_45px_rgba(0,0,0,0.2)] backdrop-blur-2xl'
+            : 'bg-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-20">
-            <Link to="/" className="flex items-center gap-2 group">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#FF5A5F] to-[#8B5CF6] flex items-center justify-center">
-                <span className="text-white font-bold text-sm">R2</span>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between lg:h-20">
+            <Link to="/" className="group flex items-center gap-2.5">
+              <motion.div
+                whileHover={reduceMotion ? undefined : { rotate: -8, scale: 1.06 }}
+                transition={{ type: 'spring', stiffness: 350, damping: 20 }}
+                className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-[#FF5A5F] via-[#FF3D8D] to-[#8B5CF6] shadow-[0_10px_28px_rgba(255,61,141,0.2)]"
+              >
+                <span className="relative z-10 text-sm font-bold text-white">R2</span>
+                <span className="absolute inset-0 -translate-x-[130%] skew-x-[-18deg] bg-gradient-to-r from-transparent via-white/35 to-transparent transition-transform duration-700 group-hover:translate-x-[130%]" />
+              </motion.div>
+              <div className="leading-none">
+                <span className="block font-[family-name:var(--font-display)] text-base font-bold tracking-[-0.03em] text-white lg:text-lg">
+                  Reel2Reach
+                </span>
+                <span className="mt-1 hidden text-[8px] font-semibold uppercase tracking-[0.28em] text-white/35 sm:block">
+                  Media Studio
+                </span>
               </div>
-              <span className="font-[family-name:var(--font-display)] font-bold text-lg text-white">
-                Reel2Reach
-              </span>
             </Link>
 
-            <div className="hidden lg:flex items-center gap-8">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={`text-sm font-medium transition-colors duration-200 ${
-                    location.pathname === link.path
-                      ? 'text-white'
-                      : 'text-[#A9ACB8] hover:text-white'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
+            <div className="hidden items-center gap-1 rounded-full border border-white/[0.06] bg-white/[0.025] p-1.5 backdrop-blur-xl lg:flex">
+              {navLinks.map((link) => {
+                const active = location.pathname === link.path;
+                return (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    className={`relative rounded-full px-3.5 py-2 text-xs font-medium transition-colors xl:px-4 ${
+                      active ? 'text-white' : 'text-[#A9ACB8] hover:text-white'
+                    }`}
+                  >
+                    {active && (
+                      <motion.span
+                        layoutId="active-nav-pill"
+                        className="absolute inset-0 rounded-full border border-white/[0.07] bg-white/[0.07] shadow-[0_6px_20px_rgba(0,0,0,0.16)]"
+                        transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                      />
+                    )}
+                    <span className="relative z-10">{link.label}</span>
+                  </Link>
+                );
+              })}
             </div>
 
-            <div className="hidden lg:flex items-center gap-4">
+            <motion.div className="hidden lg:block" whileHover={reduceMotion ? undefined : { y: -2 }} whileTap={{ scale: 0.98 }}>
               <Link
                 to="/book"
-                className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#FF5A5F] to-[#FF3D8D] text-white text-sm font-semibold hover:shadow-lg hover:shadow-pink-500/25 transition-all duration-300"
+                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-[#FF5A5F] via-[#FF3D8D] to-[#8B5CF6] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_12px_34px_rgba(255,61,141,0.18)] transition-shadow duration-500 hover:shadow-[0_15px_42px_rgba(255,61,141,0.32)]"
               >
-                BOOK A COLLAB
+                <span className="relative z-10">BOOK A COLLAB</span>
+                <ArrowUpRight size={15} className="relative z-10 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                <span className="absolute inset-0 -translate-x-[130%] skew-x-[-18deg] bg-gradient-to-r from-transparent via-white/24 to-transparent transition-transform duration-700 group-hover:translate-x-[130%]" />
               </Link>
-            </div>
+            </motion.div>
 
             <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden p-2 text-white"
-              aria-label="Toggle menu"
+              onClick={() => setMobileOpen((open) => !open)}
+              className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white backdrop-blur-xl lg:hidden"
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileOpen}
             >
-              {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={mobileOpen ? 'close' : 'open'}
+                  initial={reduceMotion ? false : { opacity: 0, rotate: -60, scale: 0.7 }}
+                  animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                  exit={reduceMotion ? undefined : { opacity: 0, rotate: 60, scale: 0.7 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+                </motion.span>
+              </AnimatePresence>
             </button>
           </div>
         </div>
@@ -97,44 +130,62 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-[#07090F]/98 backdrop-blur-xl lg:hidden"
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, clipPath: 'circle(0% at 91% 5%)' }}
+            animate={{ opacity: 1, clipPath: 'circle(150% at 91% 5%)' }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, clipPath: 'circle(0% at 91% 5%)' }}
+            transition={{ duration: reduceMotion ? 0.15 : 0.62, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-40 overflow-hidden bg-[#07090F]/98 backdrop-blur-2xl lg:hidden"
           >
-            <div className="flex flex-col items-center justify-center h-full gap-6">
-              {navLinks.map((link, i) => (
-                <motion.div
-                  key={link.path}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                >
-                  <Link
-                    to={link.path}
-                    className="text-2xl font-[family-name:var(--font-display)] font-semibold text-white hover:text-[#FF3D8D] transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </motion.div>
-              ))}
+            <div aria-hidden="true" className="absolute -right-32 top-12 h-96 w-96 rounded-full bg-[#FF3D8D]/12 blur-[100px]" />
+            <div aria-hidden="true" className="absolute -bottom-28 -left-24 h-96 w-96 rounded-full bg-[#8B5CF6]/12 blur-[110px]" />
+            <div aria-hidden="true" className="absolute inset-0 cinematic-grid opacity-[0.13]" />
+            <div aria-hidden="true" className="absolute bottom-6 left-0 right-0 overflow-hidden whitespace-nowrap font-[family-name:var(--font-display)] text-[18vw] font-bold tracking-[-0.06em] text-white/[0.025]">
+              REEL2REACH
+            </div>
+
+            <div className="relative flex h-full flex-col justify-center px-6 pt-20">
+              <p className="mb-7 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/35">Navigate / Reel2Reach</p>
+              <div className="space-y-1">
+                {navLinks.map((link, index) => {
+                  const active = location.pathname === link.path;
+                  return (
+                    <motion.div
+                      key={link.path}
+                      initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: reduceMotion ? 0 : 0.18 + index * 0.045, duration: 0.45 }}
+                    >
+                      <Link
+                        to={link.path}
+                        className={`group flex items-center justify-between border-b border-white/[0.06] py-3 font-[family-name:var(--font-display)] text-3xl font-semibold tracking-[-0.04em] transition-colors sm:text-4xl ${
+                          active ? 'text-white' : 'text-white/62 hover:text-white'
+                        }`}
+                      >
+                        <span>{link.label}</span>
+                        <ArrowUpRight size={20} className="text-white/25 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#FF6AA7]" />
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </div>
+
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="flex flex-col gap-3 mt-6"
+                transition={{ delay: reduceMotion ? 0 : 0.52 }}
+                className="mt-8 grid grid-cols-2 gap-3"
               >
                 <a
                   href="https://wa.me/918263058461?text=Hi%20Reel2Reach%20Media%2C%0AI%20would%20like%20to%20discuss%20social%20media%20promotion%2Fcontent%20creation%20for%20my%20business."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-8 py-3 rounded-full border border-green-500/50 text-green-400 font-semibold text-center"
+                  className="rounded-full border border-[#25D366]/35 bg-[#25D366]/5 px-5 py-3 text-center text-sm font-semibold text-[#8BF0A9]"
                 >
                   WhatsApp
                 </a>
                 <Link
                   to="/book"
-                  className="px-8 py-3 rounded-full bg-gradient-to-r from-[#FF5A5F] to-[#FF3D8D] text-white font-semibold text-center"
+                  className="rounded-full bg-gradient-to-r from-[#FF5A5F] to-[#FF3D8D] px-5 py-3 text-center text-sm font-semibold text-white"
                 >
                   Book Now
                 </Link>

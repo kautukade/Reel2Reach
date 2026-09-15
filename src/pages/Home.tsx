@@ -1,13 +1,25 @@
 import Hero from '../components/home/Hero';
-import { ServicesSection, MarqueeSection, EditorialSection, ProcessSection, PortfolioPreview, PackagesPreview, AddonsSection, InstagramSection, MetricsSection, CTABanner } from '../components/home/Sections';
+import {
+  ServicesSection,
+  MarqueeSection,
+  ProcessSection,
+  PortfolioPreview,
+  PackagesPreview,
+  AddonsSection,
+  InstagramSection,
+  MetricsSection,
+  CTABanner,
+} from '../components/home/Sections';
+import { CinematicStorySection, ReelShowcaseSection } from '../components/home/MotionShowcase';
 
 export default function Home() {
   return (
     <>
       <Hero />
+      <ReelShowcaseSection />
       <MarqueeSection />
       <ServicesSection />
-      <EditorialSection />
+      <CinematicStorySection />
       <PortfolioPreview />
       <MetricsSection />
       <ProcessSection />
