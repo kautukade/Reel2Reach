@@ -1,211 +1,146 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
+import { ArrowRight, BarChart3, Check, Globe, Megaphone, Palette, Sparkles, Target } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Check, ArrowRight, Megaphone, Globe, Target, BarChart3, Palette, Camera, Calendar, TrendingUp } from 'lucide-react';
+import { ArtHero, CreativeStrip, SectionTitle, TiltSurface } from '../components/common/ArtistExperience';
 
 const packages = [
   {
     name: 'Basic Plan',
     price: '₹4,999',
     priceSuffix: '',
-    description: 'Perfect for brands looking to create their first professional reel with influencer collaboration.',
-    features: [
-      '1 Reel (30–60 seconds)',
-      'Shot with an influencer',
-      'Scripted, directed and edited by the team',
-      'Caption + Hashtags + CTA',
-      'Story repost on influencer account',
-      'Influencer collaboration',
-    ],
-    cta: 'GET STARTED',
+    kicker: 'ONE STRONG MOMENT',
+    description: 'A focused reel package for a brand that wants one polished creator-led content piece.',
+    features: ['1 Reel (30–60 seconds)', 'Shot with an influencer', 'Scripted, directed and edited by the team', 'Caption + Hashtags + CTA', 'Story repost on influencer account', 'Influencer collaboration'],
+    cta: 'START WITH ONE REEL',
     recommended: false,
+    accent: 'linear-gradient(145deg,#ff7a59 0%,#ff3d8d 52%,#171018 100%)',
   },
   {
     name: 'Combo Plan',
     price: '₹14,999',
     priceSuffix: '/month',
-    description: 'Complete monthly content package with reels, posts, strategy, and influencer amplification.',
-    features: [
-      '4 Reels (1 per week)',
-      'Influencer + product integration',
-      'Edited + scripted + trending theme',
-      '10–15 Instagram posts',
-      'Static + carousel + quote templates',
-      'Content strategy & calendar',
-      'Influencer reposting 2–3x',
-      'Analytics report at the end of month',
-    ],
-    cta: 'GET STARTED',
+    kicker: 'A MONTH OF MOMENTUM',
+    description: 'A monthly content rhythm with reels, designed posts, strategy and influencer amplification.',
+    features: ['4 Reels (1 per week)', 'Influencer + product integration', 'Edited + scripted + trending theme', '10–15 Instagram posts', 'Static + carousel + quote templates', 'Content strategy & calendar', 'Influencer reposting 2–3x', 'Analytics report at the end of month'],
+    cta: 'BUILD THE MONTH',
     recommended: true,
+    accent: 'linear-gradient(145deg,#8b5cf6 0%,#ff3d8d 48%,#101225 100%)',
   },
   {
     name: 'Custom Growth Plan',
     price: 'Custom Quote',
     priceSuffix: '',
-    description: 'Tailored solutions for brands that need a comprehensive, multi-channel growth strategy.',
-    features: [
-      'Tailored to your specific needs',
-      'Full campaign management',
-      'Dedicated creative team',
-      'Multi-platform strategy',
-      'Priority support & revisions',
-      'Monthly performance reporting',
-      'Custom influencer partnerships',
-      'Brand growth roadmap',
-    ],
+    kicker: 'NO TEMPLATE REQUIRED',
+    description: 'For brands that need a tailored mix of content, collaboration, direction and ongoing support.',
+    features: ['Tailored to your specific needs', 'Full campaign management', 'Dedicated creative direction', 'Multi-platform strategy', 'Priority support & revisions', 'Monthly performance reporting', 'Custom influencer partnerships', 'Brand growth roadmap'],
     cta: 'BUILD MY PACKAGE',
     recommended: false,
+    accent: 'linear-gradient(145deg,#3a69ff 0%,#8b5cf6 45%,#101421 100%)',
   },
 ];
 
 const addons = [
-  { icon: Megaphone, title: 'Paid Ads Setup & Boost', desc: 'Inorganic marketing & paid promotion setup', price: 'On request' },
-  { icon: Globe, title: 'Social Media Management', desc: 'Full account handling & management', price: 'On request' },
-  { icon: Target, title: 'Google My Business', desc: 'Registration & local SEO optimization', price: 'On request' },
-  { icon: BarChart3, title: 'Instagram Audit & Strategy', desc: 'Complete audit with growth strategy session', price: 'On request' },
-  { icon: Palette, title: 'Logo + Branding Design', desc: 'Logo design & complete brand identity', price: 'On request' },
-  { icon: Camera, title: 'Product Photography', desc: 'Professional product photo shoots', price: 'On request' },
-  { icon: Calendar, title: 'Content Calendar', desc: 'Strategic content planning & scheduling', price: 'Included in Combo' },
-  { icon: TrendingUp, title: 'Growth Strategy', desc: 'Organic growth planning & execution', price: 'On request' },
+  { icon: Megaphone, title: 'Paid Ads Setup & Boost', desc: 'Inorganic marketing and paid promotion setup.' },
+  { icon: Globe, title: 'Social Media Management', desc: 'Full-time account handling and content management.' },
+  { icon: Target, title: 'Google My Business Registration', desc: 'Business profile setup for local digital visibility.' },
+  { icon: BarChart3, title: 'Instagram Audit & Strategy Session', desc: 'A focused review of the account and content direction.' },
+  { icon: Palette, title: 'Logo + Branding Design', desc: 'Visual identity support for brands that need a cleaner foundation.' },
 ];
 
 export default function Packages() {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <div className="pt-24 pb-16">
-      {/* Hero */}
-      <section className="py-16 lg:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
-          >
-            <h1 className="font-[family-name:var(--font-display)] text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-              PACKAGES THAT<br />
-              <span className="gradient-text">DELIVER RESULTS</span>
-            </h1>
-            <p className="text-[#A9ACB8] text-lg max-w-2xl mx-auto">
-              Choose a plan that fits your brand's needs. Every package is designed to maximize your social media impact.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+    <div className="pb-16">
+      <ArtHero
+        eyebrow="PACKAGES / CHOOSE YOUR CREATIVE RHYTHM"
+        lines={['START WITH A', 'REEL. BUILD INTO']}
+        highlight="A PRESENCE."
+        description="Three ways to enter the Reel2Reach world — from a focused one-reel collaboration to a custom content system shaped around the brand."
+        chips={['₹4,999 BASIC', '₹14,999 COMBO', 'CUSTOM QUOTE']}
+        primary={{ label: 'BOOK A COLLAB', to: '/book' }}
+        secondary={{ label: 'SEE SERVICES', to: '/services' }}
+        visualLabel="PACKAGE / COMBO"
+        visualTitle="FOUR REELS. ONE VISUAL RHYTHM."
+        visualSubtitle="A monthly package works best when every post feels connected instead of individually random."
+        accent="purple"
+      />
 
-      {/* Packages */}
-      <section className="pb-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-            {packages.map((pkg, i) => (
-              <motion.div
-                key={pkg.name}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.15 }}
-                className={`relative p-8 rounded-2xl border ${
-                  pkg.recommended
-                    ? 'border-[#FF3D8D]/30 bg-gradient-to-b from-[#FF3D8D]/5 to-transparent'
-                    : 'border-white/5 bg-[#0B0E16]'
-                }`}
-              >
-                {pkg.recommended && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-[#FF5A5F] to-[#FF3D8D] text-xs font-semibold">
-                    RECOMMENDED
-                  </div>
-                )}
-                <h3 className="font-[family-name:var(--font-display)] text-xl font-bold mb-2">{pkg.name}</h3>
-                <div className="flex items-baseline gap-1 mb-3">
-                  <span className="text-3xl font-bold">{pkg.price}</span>
-                  {pkg.priceSuffix && <span className="text-[#A9ACB8] text-sm">{pkg.priceSuffix}</span>}
-                </div>
-                <p className="text-[#A9ACB8] text-sm mb-6">{pkg.description}</p>
-                <ul className="space-y-3 mb-8">
-                  {pkg.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-[#A9ACB8]">
-                      <Check size={16} className="text-[#FF3D8D] mt-0.5 flex-shrink-0" />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  to="/book"
-                  className={`block text-center py-3 rounded-full font-semibold text-sm transition-all ${
-                    pkg.recommended
-                      ? 'bg-gradient-to-r from-[#FF5A5F] to-[#FF3D8D] text-white hover:shadow-lg hover:shadow-pink-500/25'
-                      : 'border border-white/20 text-white hover:bg-white/5'
-                  }`}
+      <CreativeStrip words={['CONCEPT', 'SCRIPT', 'SHOOT', 'EDIT', 'POSTS', 'CALENDAR', 'REPORT']} />
+
+      <section className="relative overflow-hidden py-24 lg:py-36">
+        <div className="pointer-events-none absolute inset-0 cinematic-grid opacity-[0.1]" />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <SectionTitle eyebrow="THE PACKAGES" title="PICK THE SCALE." highlight="KEEP THE STANDARD." copy="The visual treatment changes with the brand. The care in scripting, shooting and editing does not." align="center" />
+
+          <div className="mt-16 grid gap-7 lg:grid-cols-3 lg:items-stretch">
+            {packages.map((pkg, index) => (
+              <TiltSurface key={pkg.name} className={`h-full ${pkg.recommended ? 'lg:-translate-y-4' : ''}`}>
+                <motion.article
+                  initial={{ opacity: 0, y: 46 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: .8, delay: index * .08 }}
+                  className={`group relative flex h-full flex-col overflow-hidden rounded-[32px] border p-7 sm:p-8 ${pkg.recommended ? 'border-[#FF3D8D]/35 bg-[#10111c] shadow-[0_34px_100px_rgba(255,61,141,.12)]' : 'border-white/8 bg-[#0B0E16]'}`}
                 >
-                  {pkg.cta}
-                </Link>
-              </motion.div>
+                  <div className="pointer-events-none absolute inset-x-0 top-0 h-40 opacity-35" style={{ background: pkg.accent }} />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-[#0B0E16]/70 to-[#0B0E16]" />
+                  {pkg.recommended && (
+                    <motion.div
+                      className="absolute -right-14 top-8 h-44 w-44 rounded-full border border-white/20"
+                      animate={reduceMotion ? undefined : { rotate: [0, 24, 0], scale: [1, 1.08, 1] }}
+                      transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+                    />
+                  )}
+                  <div className="relative flex h-full flex-col">
+                    <div className="flex items-start justify-between gap-4">
+                      <div><p className="text-[9px] font-semibold tracking-[.22em] text-white/40">{pkg.kicker}</p><h2 className="mt-3 font-[family-name:var(--font-display)] text-2xl font-bold">{pkg.name}</h2></div>
+                      {pkg.recommended && <span className="rounded-full bg-gradient-to-r from-[#FF5A5F] to-[#FF3D8D] px-3 py-1 text-[9px] font-bold tracking-[.16em]">MOST POPULAR</span>}
+                    </div>
+
+                    <div className="mt-7 flex items-end gap-2"><span className="font-[family-name:var(--font-display)] text-4xl font-bold sm:text-5xl">{pkg.price}</span>{pkg.priceSuffix && <span className="pb-1 text-xs text-[#A9ACB8]">{pkg.priceSuffix}</span>}</div>
+                    <p className="mt-5 text-sm leading-relaxed text-[#A9ACB8]">{pkg.description}</p>
+
+                    <div className="my-7 h-px bg-white/[0.07]" />
+                    <ul className="space-y-3.5">
+                      {pkg.features.map((feature, featureIndex) => (
+                        <motion.li key={feature} initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: .15 + featureIndex * .035 }} className="flex items-start gap-3 text-sm text-[#A9ACB8]">
+                          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-[#FF3D8D]/20 bg-[#FF3D8D]/8 text-[#FF6AA7]"><Check size={11} /></span><span>{feature}</span>
+                        </motion.li>
+                      ))}
+                    </ul>
+                    <div className="mt-auto pt-9"><Link to="/book" className={`group/cta flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-sm font-semibold transition ${pkg.recommended ? 'bg-gradient-to-r from-[#FF5A5F] to-[#FF3D8D] shadow-[0_16px_45px_rgba(255,61,141,.18)] hover:-translate-y-0.5' : 'border border-white/14 bg-white/[0.03] hover:bg-white/[0.07]'}`}>{pkg.cta}<ArrowRight size={15} className="transition-transform group-hover/cta:translate-x-1" /></Link></div>
+                  </div>
+                  {pkg.recommended && <div className="pointer-events-none absolute -inset-x-4 top-[-25%] h-20 rotate-12 bg-gradient-to-b from-transparent via-white/18 to-transparent blur-xl transition-all duration-1000 group-hover:top-[115%]" />}
+                </motion.article>
+              </TiltSurface>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Add-ons */}
-      <section className="py-20 bg-[#0B0E16]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="font-[family-name:var(--font-display)] text-3xl sm:text-4xl font-bold mb-4">
-              NEED MORE? <span className="gradient-text">SUPERCHARGE YOUR BRAND.</span>
-            </h2>
-            <p className="text-[#A9ACB8]">Add-on services to complement any package</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {addons.map((addon, i) => (
-              <motion.div
-                key={addon.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                className="p-5 rounded-xl bg-[#10131D] border border-white/5 hover:border-white/10 transition-all"
-              >
-                <addon.icon size={20} className="text-[#FF3D8D] mb-3" />
-                <h4 className="font-semibold text-sm mb-1">{addon.title}</h4>
-                <p className="text-[#A9ACB8] text-xs mb-2">{addon.desc}</p>
-                <span className="text-[#FF3D8D] text-xs font-medium">{addon.price}</span>
-              </motion.div>
+      <section className="border-y border-white/[0.05] bg-[#0B0E16]/85 py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <SectionTitle eyebrow="ADD-ONS FROM THE REEL2REACH OFFER" title="ADD WHAT THE" highlight="BRAND ACTUALLY NEEDS" copy="Keep the core package focused, then add support where the brand needs more reach, consistency or identity work." />
+          <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+            {addons.map((addon, index) => (
+              <TiltSurface key={addon.title} className="h-full">
+                <motion.article initial={{ opacity:0,y:26 }} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{delay:index*.055}} className="h-full rounded-[25px] border border-white/7 bg-[#10131D] p-5">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-[#FF6AA7]"><addon.icon size={20}/></div><p className="mt-6 text-[9px] font-semibold tracking-[.2em] text-white/22">ADD / 0{index+1}</p><h3 className="mt-2 font-[family-name:var(--font-display)] text-base font-bold leading-tight">{addon.title}</h3><p className="mt-3 text-xs leading-relaxed text-[#A9ACB8]">{addon.desc}</p>
+                </motion.article>
+              </TiltSurface>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="font-[family-name:var(--font-display)] text-3xl font-bold mb-4">
-              NOT SURE WHICH PLAN IS RIGHT?
-            </h2>
-            <p className="text-[#A9ACB8] mb-8">Let's discuss your needs and find the perfect fit for your brand.</p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link
-                to="/book"
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-[#FF5A5F] to-[#FF3D8D] text-white font-semibold hover:shadow-lg hover:shadow-pink-500/25 transition-all"
-              >
-                BOOK A COLLABORATION <ArrowRight size={16} />
-              </Link>
-              <a
-                href="https://wa.me/918263058461?text=Hi%20Reel2Reach%20Media%2C%20I%20want%20to%20know%20more%20about%20your%20packages."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full border border-white/20 text-white font-semibold hover:bg-white/5 transition-all"
-              >
-                ASK ON WHATSAPP
-              </a>
-            </div>
-          </motion.div>
+      <section className="relative overflow-hidden py-28 lg:py-40">
+        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#FF3D8D]/8 blur-[140px]" />
+        <div className="relative mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+          <Sparkles size={26} className="mx-auto text-[#FF6AA7]" />
+          <motion.h2 initial={{opacity:0,scale:.94}} whileInView={{opacity:1,scale:1}} viewport={{once:true}} className="mt-6 font-[family-name:var(--font-display)] text-4xl font-bold leading-[.95] sm:text-6xl lg:text-7xl">A PACKAGE IS A START.<br /><span className="gradient-text gradient-text-live">THE IDEA MAKES IT YOURS.</span></motion.h2>
+          <p className="mx-auto mt-6 max-w-2xl text-sm leading-relaxed text-[#A9ACB8] sm:text-base">Tell us the product, audience and goal. We can recommend whether the Basic, Combo or a custom direction makes the most sense.</p>
+          <div className="mt-9 flex flex-wrap justify-center gap-3"><Link to="/book" className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#FF5A5F] to-[#FF3D8D] px-7 py-3.5 text-sm font-semibold">DISCUSS MY BRAND <ArrowRight size={16}/></Link><a href="https://wa.me/918263058461?text=Hi%20Reel2Reach%20Media%2C%20I%20want%20to%20know%20more%20about%20your%20packages." target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/14 bg-white/[0.03] px-7 py-3.5 text-sm font-semibold">ASK ON WHATSAPP</a></div>
         </div>
       </section>
     </div>
