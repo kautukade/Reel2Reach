@@ -1,142 +1,147 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
+import { ArrowRight, Eye, Heart, Sparkles, Target, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Eye, Target, Heart, Zap } from 'lucide-react';
+import { ArtHero, CreativeStrip, SectionTitle, TiltSurface } from '../components/common/ArtistExperience';
+
+const values = [
+  { icon: Eye, title: 'Seen Differently', desc: 'Visual ideas built to interrupt familiar scrolling patterns without becoming noisy.' },
+  { icon: Target, title: 'Made With Intent', desc: 'Every frame, hook and transition has a job — attract, explain, connect or convert.' },
+  { icon: Heart, title: 'Human First', desc: 'Creator-led storytelling that feels like content people choose to watch, not an ad they skip.' },
+  { icon: Zap, title: 'Built For Motion', desc: 'Ideas are designed for movement from day one: reels, product moments, BTS and social-native edits.' },
+];
 
 export default function About() {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <div className="pt-24 pb-16">
-      {/* Hero */}
-      <section className="py-16 lg:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="pb-16">
+      <ArtHero
+        eyebrow="ABOUT / REEL2REACH MEDIA"
+        lines={['WE DON’T MAKE', 'CONTENT TO FILL']}
+        highlight="A FEED."
+        description="We build social-first visual stories for small businesses and growing brands — combining reel direction, creator energy and a strong visual point of view."
+        chips={['CREATIVE DIRECTION', 'REELS', 'INFLUENCER CONTENT', 'SOCIAL STORYTELLING']}
+        primary={{ label: 'WORK WITH US', to: '/book' }}
+        secondary={{ label: 'SEE OUR WORK', to: '/portfolio' }}
+        visualLabel="BEHIND THE IDEA"
+        visualTitle="STORY BEFORE STYLE"
+        visualSubtitle="A good visual earns attention. A good story gives people a reason to stay."
+        accent="purple"
+      />
+
+      <CreativeStrip words={['IDEA', 'FRAME', 'MOTION', 'PERSONALITY', 'STORY', 'ATTENTION']} />
+
+      <section className="relative overflow-hidden py-24 lg:py-36">
+        <div className="pointer-events-none absolute left-[6%] top-[14%] h-80 w-80 rounded-full bg-[#8B5CF6]/10 blur-[120px]" />
+        <div className="mx-auto grid max-w-7xl gap-14 px-4 sm:px-6 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-4xl"
+            initial={{ opacity: 0, x: -40, rotateY: reduceMotion ? 0 : 8 }}
+            whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
+            viewport={{ once: true, margin: '-10%' }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            className="relative mx-auto h-[520px] w-full max-w-[460px]"
+            style={{ perspective: 1200 }}
           >
-            <h1 className="font-[family-name:var(--font-display)] text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-              WE TURN BUSINESSES<br />
-              INTO CONTENT PEOPLE<br />
-              <span className="gradient-text">WANT TO WATCH.</span>
-            </h1>
-            <p className="text-[#A9ACB8] text-lg max-w-2xl">
-              Reel2Reach Media is a creative content studio that helps small businesses and brands grow on social media through professional video content, influencer collaborations, and strategic social media management.
-            </p>
+            <motion.div
+              className="absolute left-[8%] top-[8%] h-[76%] w-[70%] overflow-hidden rounded-[32px] border border-white/10 bg-[#0B0E16] shadow-[0_40px_100px_rgba(0,0,0,.45)]"
+              animate={reduceMotion ? undefined : { rotate: [-4, -1, -4], y: [0, -10, 0] }}
+              transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(255,90,95,.36),transparent_25%),radial-gradient(circle_at_70%_45%,rgba(139,92,246,.34),transparent_30%),linear-gradient(160deg,#161120,#080a10)]" />
+              <div className="absolute inset-0 cinematic-grid opacity-20" />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#07090F] to-transparent p-6 pt-24">
+                <p className="text-[10px] font-semibold tracking-[.24em] text-[#FF6AA7]">STUDIO NOTE / 01</p>
+                <p className="mt-2 font-[family-name:var(--font-display)] text-3xl font-bold leading-none">MAKE IT FEEL<br />LIKE SOMETHING.</p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="absolute bottom-[3%] right-[4%] w-[58%] rounded-[28px] border border-white/10 bg-[#0B0E16]/90 p-5 shadow-[0_28px_80px_rgba(0,0,0,.5)] backdrop-blur-xl"
+              animate={reduceMotion ? undefined : { y: [0, 9, 0], rotate: [5, 2.5, 5] }}
+              transition={{ duration: 6.2, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[9px] font-semibold tracking-[.22em] text-[#B48AFF]">EDIT / RHYTHM</span>
+                <Sparkles size={14} className="text-[#FF6AA7]" />
+              </div>
+              <div className="mt-5 flex h-20 items-end gap-1.5">
+                {[35, 72, 48, 88, 57, 76, 42, 64].map((height, i) => (
+                  <motion.span
+                    key={height + i}
+                    className="w-full rounded-full bg-gradient-to-t from-[#8B5CF6] to-[#FF5A5F]"
+                    animate={reduceMotion ? undefined : { height: [`${height * .55}%`, `${Math.min(100, height + 12)}%`, `${height * .55}%`] }}
+                    transition={{ duration: 2.2 + i * .11, repeat: Infinity, ease: 'easeInOut' }}
+                  />
+                ))}
+              </div>
+            </motion.div>
           </motion.div>
-        </div>
-      </section>
 
-      {/* Story */}
-      <section className="py-16 lg:py-24 bg-[#0B0E16]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <div className="aspect-[4/5] rounded-2xl bg-gradient-to-br from-[#FF5A5F]/20 to-[#8B5CF6]/20 border border-white/5 overflow-hidden">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center p-8">
-                    <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#FF5A5F] to-[#8B5CF6] flex items-center justify-center">
-                      <Zap size={32} className="text-white" />
-                    </div>
-                    <p className="text-white/60 text-sm">Behind the scenes at Reel2Reach</p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="font-[family-name:var(--font-display)] text-3xl font-bold mb-6">
-                OUR STORY
-              </h2>
-              <div className="space-y-4 text-[#A9ACB8] leading-relaxed">
-                <p>
-                  Reel2Reach Media was born from a simple observation: small businesses and local brands have incredible products and services, but they struggle to get noticed in the noisy world of social media.
-                </p>
-                <p>
-                  We bridge that gap. Through creative reels, strategic influencer partnerships, and data-driven social media management, we help brands build a digital presence that actually converts.
-                </p>
-                <p>
-                  Every piece of content we create is designed with one goal — to make your brand impossible to scroll past.
-                </p>
-              </div>
-              <Link
-                to="/book"
-                className="inline-flex items-center gap-2 mt-8 px-6 py-3 rounded-full bg-gradient-to-r from-[#FF5A5F] to-[#FF3D8D] text-white font-semibold text-sm hover:shadow-lg hover:shadow-pink-500/25 transition-all"
-              >
-                WORK WITH US <ArrowRight size={16} />
-              </Link>
-            </motion.div>
+          <div>
+            <SectionTitle
+              eyebrow="WHY REEL2REACH EXISTS"
+              title="LOCAL BRANDS HAVE"
+              highlight="BIG STORIES TOO."
+              copy="The idea is simple: good products deserve better presentation. Reel2Reach turns everyday business moments into visually strong, emotionally clear content made for Instagram-first audiences."
+            />
+            <div className="mt-8 space-y-5 text-sm leading-relaxed text-[#A9ACB8] sm:text-base">
+              <motion.p initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                We start with the brand, not the trend. What should people feel? What should they remember? What should they do next? Then we shape the hook, visual language, shot style and edit around that answer.
+              </motion.p>
+              <motion.p initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: .08 }}>
+                That gives each project its own personality instead of forcing every client into the same template.
+              </motion.p>
+            </div>
+            <Link to="/book" className="group mt-8 inline-flex items-center gap-2 text-sm font-semibold text-white">
+              Build something original <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Values */}
-      <section className="py-16 lg:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="font-[family-name:var(--font-display)] text-3xl sm:text-4xl font-bold text-center mb-16"
-          >
-            WHAT DRIVES <span className="gradient-text">US</span>
-          </motion.h2>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: Eye, title: 'Visibility', desc: 'Making brands seen in a crowded digital world' },
-              { icon: Target, title: 'Precision', desc: 'Content crafted for your specific audience' },
-              { icon: Heart, title: 'Passion', desc: 'We love what we create, and it shows' },
-              { icon: Zap, title: 'Impact', desc: 'Every piece of content drives results' },
-            ].map((value, i) => (
-              <motion.div
-                key={value.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="p-6 rounded-2xl bg-[#0B0E16] border border-white/5 text-center"
-              >
-                <value.icon size={28} className="text-[#FF3D8D] mx-auto mb-4" />
-                <h3 className="font-semibold mb-2">{value.title}</h3>
-                <p className="text-[#A9ACB8] text-sm">{value.desc}</p>
-              </motion.div>
+      <section className="border-y border-white/[0.05] bg-[#0B0E16]/75 py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <SectionTitle eyebrow="THE CREATIVE CODE" title="WHAT DRIVES" highlight="THE WORK" align="center" />
+          <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {values.map((value, index) => (
+              <TiltSurface key={value.title} className="h-full">
+                <motion.article
+                  initial={{ opacity: 0, y: 36 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * .08 }}
+                  className="group relative h-full overflow-hidden rounded-[28px] border border-white/8 bg-[#10131D] p-6"
+                >
+                  <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[#FF3D8D]/8 blur-3xl transition group-hover:bg-[#8B5CF6]/14" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-[#FF6AA7]">
+                    <value.icon size={22} />
+                  </div>
+                  <p className="mt-8 text-[10px] font-semibold tracking-[.22em] text-white/30">0{index + 1}</p>
+                  <h3 className="mt-2 font-[family-name:var(--font-display)] text-xl font-bold">{value.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[#A9ACB8]">{value.desc}</p>
+                </motion.article>
+              </TiltSurface>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Approach */}
-      <section className="py-16 lg:py-24 bg-[#0B0E16]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center">
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="font-[family-name:var(--font-display)] text-3xl sm:text-4xl font-bold mb-6"
-            >
-              OUR CONTENT <span className="gradient-text">PHILOSOPHY</span>
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-[#A9ACB8] text-lg leading-relaxed"
-            >
-              We believe great content isn't just about looking good — it's about telling a story that connects, 
-              creating hooks that stop the scroll, and building a brand presence that people remember. 
-              Every reel we make, every campaign we run, is designed to turn passive viewers into engaged customers.
-            </motion.p>
-          </div>
+      <section className="relative overflow-hidden py-28 lg:py-40">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,61,141,.10),transparent_45%)]" />
+        <div className="relative mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+          <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-[10px] font-semibold tracking-[.28em] text-[#FF6AA7]">OUR PHILOSOPHY</motion.p>
+          <motion.h2
+            initial={{ opacity: 0, scale: .92, filter: 'blur(10px)' }}
+            whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+            viewport={{ once: true }}
+            transition={{ duration: .9 }}
+            className="mt-6 font-[family-name:var(--font-display)] text-4xl font-bold leading-[.95] sm:text-6xl lg:text-8xl"
+          >
+            LOOK GOOD.<br />FEEL REAL.<br /><span className="gradient-text gradient-text-live">STAY REMEMBERED.</span>
+          </motion.h2>
+          <p className="mx-auto mt-7 max-w-2xl text-sm leading-relaxed text-[#A9ACB8] sm:text-base">
+            Style gets the first glance. Personality gets the second. Our goal is to create both.
+          </p>
         </div>
       </section>
     </div>
