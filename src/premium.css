@@ -1,0 +1,117 @@
+:root {
+  --r2r-pointer-x: 50vw;
+  --r2r-pointer-y: 40vh;
+}
+
+.pointer-spotlight {
+  background:
+    radial-gradient(460px circle at var(--r2r-pointer-x) var(--r2r-pointer-y), rgba(255, 61, 141, 0.095), transparent 62%),
+    radial-gradient(680px circle at calc(var(--r2r-pointer-x) + 100px) calc(var(--r2r-pointer-y) - 80px), rgba(139, 92, 246, 0.055), transparent 68%);
+  mix-blend-mode: screen;
+  opacity: .86;
+}
+
+.r2r-cursor-ring {
+  transition: width 180ms ease, height 180ms ease, border-color 180ms ease, background 180ms ease;
+  box-shadow: inset 0 0 22px rgba(255,255,255,.025), 0 0 38px rgba(255,61,141,.055);
+}
+
+.r2r-cursor-dot {
+  box-shadow: 0 0 18px rgba(255,255,255,.75);
+}
+
+@media (pointer: fine) {
+  body[data-r2r-cursor='on'] { cursor: none; }
+  body[data-r2r-cursor='on'] input,
+  body[data-r2r-cursor='on'] textarea,
+  body[data-r2r-cursor='on'] select,
+  body[data-r2r-cursor='on'] option { cursor: auto; }
+}
+
+/* Global premium surface treatment: subtle edge light without turning every card glossy. */
+a[class*='rounded-'],
+button[class*='rounded-'] {
+  position: relative;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a[class*='rounded-']::after,
+  button[class*='rounded-']::after {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0;
+    background: linear-gradient(105deg, transparent 18%, rgba(255,255,255,.13) 48%, transparent 72%);
+    transform: translateX(-35%);
+    transition: opacity 260ms ease, transform 620ms cubic-bezier(.22,1,.36,1);
+  }
+
+  a[class*='rounded-']:hover::after,
+  button[class*='rounded-']:hover::after {
+    opacity: .52;
+    transform: translateX(35%);
+  }
+}
+
+/* Cinematic section separators that catch the eye while scrolling. */
+main > div > section {
+  isolation: isolate;
+}
+
+main > div > section::selection {
+  background: rgba(255,61,141,.42);
+}
+
+@keyframes r2r-edge-breathe {
+  0%, 100% { opacity: .18; transform: scaleX(.82); }
+  50% { opacity: .5; transform: scaleX(1); }
+}
+
+.r2r-premium-edge {
+  height: 1px;
+  transform-origin: center;
+  background: linear-gradient(90deg, transparent, rgba(255,61,141,.65), rgba(139,92,246,.55), transparent);
+  animation: r2r-edge-breathe 5.8s ease-in-out infinite;
+}
+
+/* A softer, more expensive looking typography finish on very large display text. */
+.font-display,
+[class*='font-[family-name:var(--font-display)]'] {
+  text-rendering: geometricPrecision;
+}
+
+@supports (text-wrap: balance) {
+  h1, h2 { text-wrap: balance; }
+}
+
+/* Keep interactive content crisp over moving WebGL backgrounds. */
+.webgl-art-scene {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  image-rendering: auto;
+}
+
+@media (max-width: 767px) {
+  .pointer-spotlight,
+  .r2r-cursor-ring,
+  .r2r-cursor-dot { display: none !important; }
+
+  /* Prevent long animated labels from looking crowded on small phones. */
+  [class*='tracking-[0.3em]'],
+  [class*='tracking-[.3em]'] { letter-spacing: .18em !important; }
+
+  /* Better thumb-first CTA ergonomics on compact devices. */
+  a[class*='rounded-full'][class*='px-6'],
+  a[class*='rounded-full'][class*='px-7'],
+  button[class*='rounded-full'][class*='px-6'],
+  button[class*='rounded-full'][class*='px-7'] {
+    min-height: 48px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .r2r-premium-edge { animation: none; opacity: .28; }
+  .pointer-spotlight { display: none; }
+}
