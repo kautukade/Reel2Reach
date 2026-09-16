@@ -6,7 +6,7 @@ import { isSupabaseConfigured, supabase } from '../lib/supabase';
 
 const channels = [
   { icon: MessageCircle, label: 'WhatsApp', value: '+91 8263058461', href: 'https://wa.me/918263058461', color: '#25D366', note: 'Fastest way to start a project conversation' },
-  { icon: Instagram, label: 'Instagram', value: '@ashwini_rathod_19', href: 'https://instagram.com/ashwini_rathod_19', color: '#FF5A8E', note: 'See the creator side and current social activity' },
+  { icon: Instagram, label: 'Instagram', value: '@ashwini__rathod__19', href: 'https://www.instagram.com/ashwini__rathod__19/', color: '#FF5A8E', note: 'See the creator side and current social activity' },
   { icon: Mail, label: 'Email', value: 'real2reach@gmail.com', href: 'mailto:real2reach@gmail.com', color: '#FF6AA7', note: 'Best for longer briefs, references and documents' },
   { icon: Phone, label: 'Phone', value: '+91 8263058461', href: 'tel:+918263058461', color: '#B48AFF', note: 'Talk directly when a quick call makes more sense' },
 ];
